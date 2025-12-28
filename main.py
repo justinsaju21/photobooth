@@ -1,6 +1,72 @@
 import streamlit as st
+import streamlit.components.v1 as components
 from PIL import Image
 import utils
+
+# --- PAGE SETUP ---
+# Sidebar Toggle Component (Robust Logic)
+def add_sidebar_toggle():
+    components.html("""
+    <style>
+        .open-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 45px;
+            height: 45px;
+            background-color: black;
+            color: white;
+            border-radius: 50%;
+            border: 2px solid #D4AF37;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 999999;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+        .open-btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
+    <div class="open-btn" onclick="toggleSidebar()">
+        ➤
+    </div>
+    <script>
+        function toggleSidebar() {
+            try {
+                // Target parent window (Streamlit App)
+                const doc = window.parent.document;
+                
+                // Attempt to find the toggle button using multiple known selectors
+                const selectors = [
+                    '[data-testid="collapsedControl"]',
+                    '[data-testid="stSidebarCollapsedControl"]',
+                    'button[kind="header"]' // Fallback for very new versions
+                ];
+                
+                let btn = null;
+                for (let s of selectors) {
+                    btn = doc.querySelector(s);
+                    if (btn) break;
+                }
+                
+                if (btn) {
+                    btn.click();
+                } else {
+                    console.log("Sidebar toggle not found. Attempting keyboard shortcut.");
+                    // Dispatch 'c' key for sidebar
+                    const event = new KeyboardEvent('keypress', { 'key': 'c' });
+                    doc.dispatchEvent(event);
+                }
+            } catch (e) {
+                console.error("Sidebar toggle failed:", e);
+            }
+        }
+    </script>
+    """, height=0, width=0)
 
 # --- Page Configuration ---
 st.set_page_config(
@@ -193,6 +259,7 @@ with st.sidebar:
 st.markdown(get_live_filter_css(filter_option, mirror_mode), unsafe_allow_html=True)
 
 # --- Main Layout ---
+add_sidebar_toggle() # Inject custom sidebar button
 spacer_l, center_col, spacer_r = st.columns([1, 2, 1])
 
 with center_col:
