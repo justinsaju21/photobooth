@@ -46,23 +46,19 @@ def get_live_filter_css(filter_name, mirror):
 
     return f"""
     <style>
-        /* TARGETED VIDEO FIX */
-        /* Instead of forcing the container (which holds the button) to be square/weird,
-           we only force the VIDEO element to handle aspect ratio. */
-           
+        /* ROBUST CAMERA SIZING (V17) */
+        
+        /* Base: Mobile First / Default */
         div[data-testid="stCameraInput"] {{
             width: 100% !important;
-            max-width: 500px !important;
             margin: 0 auto !important;
             border-radius: 12px;
             overflow: hidden;
             border: 4px solid #333;
-            /* Do NOT force height here, let it grow to fit content (video + button) */
         }}
         
         div[data-testid="stCameraInput"] > video {{
             width: 100% !important;
-            /* Force Aspect Ratio on VIDEO only */
             aspect-ratio: 1 / 1 !important;
             object-fit: cover !important;
             transform: {transform} !important;
@@ -77,6 +73,20 @@ def get_live_filter_css(filter_name, mirror):
             font-weight: bold !important;
             text-transform: uppercase !important;
             width: 100% !important;
+        }}
+        
+        /* RESPONSIVE CONSTRAINTS */
+        /* Limit size on small viewports to keep square */
+        @media (max-height: 800px) {{
+            div[data-testid="stCameraInput"] {{
+                max-width: 60vh !important; /* use viewport height as reference */
+            }}
+        }}
+        
+        @media (min-width: 1000px) {{
+            div[data-testid="stCameraInput"] {{
+                max-width: 500px !important;
+            }}
         }}
     </style>
     """
@@ -113,6 +123,9 @@ with st.sidebar:
     custom_border_color = None
     if frame_style == "Custom":
         custom_border_color = st.color_picker("Border Color", "#FCFAF6")
+
+    st.markdown("### 🔤 Typography")
+    font_style = st.selectbox("Font Style:", ("Modern", "Classic", "Retro"), index=0)
 
     # --- Sticker Feature ---
     st.markdown("### ✨ Decoration")
@@ -228,7 +241,8 @@ with center_col:
             custom_border_color=custom_border_color,
             sticker_pack=sticker_pack,
             custom_stickers=custom_sticker,
-            sticker_density=sticker_density
+            sticker_density=sticker_density,
+            font_style=font_style
         )
         
         st.image(final_strip, caption=f"{filter_option} • {frame_style} • {sticker_pack}", use_container_width=True)

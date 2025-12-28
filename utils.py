@@ -6,24 +6,36 @@ import os
 import platform
 
 # --- FONT HELPERS ---
-def load_font(size=40, font_type="regular"):
+def load_font(size=40, font_type="regular", style="Modern"):
     """
-    Robust font loading using Bundled Assets first.
+    Robust font loading with Style support.
     """
-    # Map types to bundled assets
-    if font_type == "title":
-        # Fallback to Lato if Playfair is missing (common download issue)
-        candidates = ["assets/PlayfairDisplay-Bold.ttf", "assets/Lato-Regular.ttf"]
-    else:
-        candidates = ["assets/Lato-Regular.ttf"]
-        
-    # Add system fallbacks just in case bundle fails
-    candidates.extend([
-        "arial.ttf",
-        "LiberationSans-Regular.ttf", 
-        "DejaVuSans.ttf"
-    ])
+    candidates = []
     
+    # style: "Modern" (Sans), "Classic" (Serif), "Retro" (Mono/Typewriter)
+    
+    if style == "Classic":
+        if font_type == "title":
+            candidates.append("assets/PlayfairDisplay-Bold.ttf")
+        candidates.extend(["times.ttf", "LiberationSerif-Regular.ttf", "DejaVuSerif.ttf"])
+        
+    elif style == "Retro":
+        candidates.extend(["courier.ttf", "Courier New.ttf", "LiberationMono-Regular.ttf", "DejaVuSansMono.ttf"])
+        
+    else: # Modern (Default)
+        if font_type == "title":
+            candidates.append("assets/PlayfairDisplay-Bold.ttf") # Keep fancy title for Modern? Or stick to Sans?
+            # actually, modern usually implies Sans title too. But the user liked the "Vintage" vibe.
+            # Let's keep Playfair for Title only if it's explicitly requested or maybe just use Lato/Sans for modern to be distinct.
+            # Let's make Modern purely Sans for contrast.
+            pass 
+        candidates.append("assets/Lato-Regular.ttf")
+        candidates.extend(["arial.ttf", "LiberationSans-Regular.ttf", "DejaVuSans.ttf"])
+
+    # Fallback to Lato if everything else fails (except for Retro where we really want Mono)
+    if style != "Retro":
+        candidates.append("assets/Lato-Regular.ttf")
+
     for font_name in candidates:
         try:
             return ImageFont.truetype(font_name, size)
@@ -163,7 +175,7 @@ def draw_stickers(draw, strip_width, strip_height, sticker_list, density):
             draw.text((x_pos, y_pos), symbol, font=font, fill="#404040")
 
 
-def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_color="#333", include_date=False, custom_border_color=None, sticker_pack="None", custom_stickers="", sticker_density=5):
+def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_color="#333", include_date=False, custom_border_color=None, sticker_pack="None", custom_stickers="", sticker_density=5, font_style="Modern"):
     photo_w, photo_h = 600, 600
     padding = 50
     header_h = 100
@@ -219,9 +231,10 @@ def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_col
     if active_stickers:
         draw_stickers(draw, strip_w, strip_h, active_stickers, sticker_density)
 
-    # Text using Bundled Fonts
-    font_title = load_font(60, "title")
-    font_footer = load_font(40, "regular")
+    # Text using Styled Fonts
+    # Select title font based on chosen style
+    font_title = load_font(60, "title", style=font_style)
+    font_footer = load_font(40, "regular", style=font_style)
     
     draw.text((strip_w/2, 50), "PHOTOBOOTH", fill=text_color, font=font_title, anchor="mm")
     
@@ -231,7 +244,7 @@ def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_col
     if include_date:
         from datetime import datetime
         date_str = datetime.now().strftime("%Y-%m-%d")
-        draw.text((strip_w/2, footer_y + 50), date_str, fill=text_color, font=load_font(25, "regular"), anchor="mm")
+        draw.text((strip_w/2, footer_y + 50), date_str, fill=text_color, font=load_font(25, "regular", style=font_style), anchor="mm")
         
     return strip 
 
