@@ -261,19 +261,17 @@ footer {
     /* Maximum Priority */
 
     background-color: #000000 !important;
-    /* Pure Black for maximum contrast */
+    /* Pure Black Request */
     color: #FFFFFF !important;
-    /* Pure White Icon */
+    /* White Icon */
 
-    border: 2px solid #D4AF37 !important;
-    /* Gold Border */
+    border: 1px solid #333 !important;
+    /* Subtle dark border instead of Gold if they want pure black look, keeping minimal */
     border-radius: 50% !important;
-    /* Circular for button look */
     padding: 8px !important;
     width: 45px !important;
     height: 45px !important;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5) !important;
-    /* Gold Glow */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5) !important;
     transition: all 0.3s ease !important;
 }
 
