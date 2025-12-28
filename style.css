@@ -237,9 +237,11 @@ header {
 /* Re-enable clicks on the toggle button & Make sure it is visible */
 /* --- SIDEBAR TOGGLE --- */
 /* Target BOTH potential IDs for the toggle button */
-/* Target ALL potential selectors for the toggle button (Closed State) */
+/* Target ALL potential selectors for the toggle button (both states) */
 [data-testid="collapsedControl"],
 [data-testid="stSidebarCollapsedControl"],
+[data-testid="stExpandSidebarButton"],
+[data-testid="stCollapseSidebarButton"],
 button[title="Expand sidebar"],
 button[title="Collapse sidebar"] {
     visibility: visible !important;
@@ -274,6 +276,8 @@ button[title="Collapse sidebar"] {
 
 [data-testid="collapsedControl"]:hover,
 [data-testid="stSidebarCollapsedControl"]:hover,
+[data-testid="stExpandSidebarButton"]:hover,
+[data-testid="stCollapseSidebarButton"]:hover,
 button[title="Expand sidebar"]:hover,
 button[title="Collapse sidebar"]:hover {
     transform: scale(1.1) !important;
@@ -284,6 +288,8 @@ button[title="Collapse sidebar"]:hover {
 /* Force Icon to be BLACK via currentColor */
 [data-testid="collapsedControl"] svg,
 [data-testid="stSidebarCollapsedControl"] svg,
+[data-testid="stExpandSidebarButton"] svg,
+[data-testid="stCollapseSidebarButton"] svg,
 button[title="Expand sidebar"] svg,
 button[title="Collapse sidebar"] svg {
     fill: currentColor !important;
@@ -295,6 +301,8 @@ button[title="Collapse sidebar"] svg {
 /* Ensure Paths inherit */
 [data-testid="collapsedControl"] svg path,
 [data-testid="stSidebarCollapsedControl"] svg path,
+[data-testid="stExpandSidebarButton"] svg path,
+[data-testid="stCollapseSidebarButton"] svg path,
 button[title="Expand sidebar"] svg path,
 button[title="Collapse sidebar"] svg path {
     fill: currentColor !important;
