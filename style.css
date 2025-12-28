@@ -6,11 +6,12 @@
     /* Cinematic Gold */
     --secondary-color: #F5F1E8;
     /* Cream */
-    --text-color: #2C2C2C;
-    /* Soft Black */
+    --text-color: #E0E0E0;
+    /* Light Grey for Dark Mode */
     --accent-color: #8B5E3C;
     /* Warm Brown */
-    --bg-color: #FCFAF6;
+    --bg-color: #000000;
+    /* PURE BLACK BACKGROUND */
     --booth-bg: #111;
 }
 
