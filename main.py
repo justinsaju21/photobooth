@@ -132,6 +132,26 @@ def get_live_filter_css(filter_name, mirror):
     </style>
     """
 
+def get_font_css(style):
+    """Generate CSS for UI font themes"""
+    font_map = {
+        "Modern Sans": "'Lato', sans-serif",
+        "Classic Serif": "'Playfair Display', serif",
+        "Retro Typewriter": "'Courier New', Courier, monospace",
+        "Elegant Script": "'Brush Script MT', cursive",
+        "Bold Display": "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif",
+        "Minimal": "'Lato', sans-serif",
+        "Gothic": "serif",
+        "Playful": "'Comic Sans MS', 'Comic Sans', cursive"
+    }
+    
+    # Custom font stacks for specialized styles
+    if style == "Elegant Script":
+        return f'<style>h1 {{ font-family: {font_map[style]} !important; text-transform: none !important; }}</style>'
+    
+    family = font_map.get(style, "'Lato', sans-serif")
+    return f'<style>h1, .main-title {{ font-family: {family} !important; }}</style>'
+
 # --- Session State Init ---
 if 'captures' not in st.session_state:
     st.session_state.captures = []
@@ -194,8 +214,9 @@ with st.sidebar:
         reset_session()
         st.rerun()
 
-# --- Inject Live Filter CSS ---
+# --- Inject Live Filter and Font CSS ---
 st.markdown(get_live_filter_css(filter_option, mirror_mode), unsafe_allow_html=True)
+st.markdown(get_font_css(font_style), unsafe_allow_html=True)
 
 # --- Main Layout ---
 spacer_l, center_col, spacer_r = st.columns([1, 2, 1])
