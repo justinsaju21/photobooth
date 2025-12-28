@@ -225,6 +225,7 @@ header {
 /* Re-enable clicks on the toggle button & Make sure it is visible */
 /* --- SIDEBAR TOGGLE --- */
 /* Target BOTH potential IDs for the toggle button */
+/* Target ALL potential selectors for the toggle button (Closed State) */
 [data-testid="collapsedControl"],
 [data-testid="stSidebarCollapsedControl"] {
     visibility: visible !important;
