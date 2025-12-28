@@ -213,14 +213,13 @@ footer {
     visibility: hidden;
 }
 
-/* NUCLEAR OPTION: Force Sidebar Toggle to always be visible and clickable */
+/* RESTORE STABILITY: Standard Header Visibility */
 header {
     background: transparent !important;
     visibility: visible !important;
-    /* Ensure parent is visible */
-    pointer-events: none !important;
-    /* Let clicks pass through empty header */
-    z-index: 999999 !important;
+    /* pointer-events: none; REMOVED to fix click issues */
+    z-index: 100 !important;
+    /* Lower z-index so it doesn't overlay weirdly */
 }
 
 /* Re-enable clicks on the toggle button & Make sure it is visible */

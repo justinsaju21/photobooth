@@ -4,58 +4,8 @@ from PIL import Image
 import utils
 
 # --- PAGE SETUP ---
-# Sidebar Toggle Component (Robust Logic)
-def add_sidebar_toggle():
-    st.markdown("""
-    <style>
-        .custom-sidebar-trigger {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            width: 50px;
-            height: 50px;
-            background-color: #000000 !important;
-            color: #D4AF37 !important;
-            border: 2px solid #D4AF37 !important;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            z-index: 2147483647 !important; /* MAX INT to override everything */
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            user-select: none;
-            text-decoration: none;
-            font-family: sans-serif;
-        }
-        .custom-sidebar-trigger:hover {
-            transform: scale(1.1);
-            background-color: #111 !important;
-        }
-    </style>
-    
-    <!-- JS to click the internal button -->
-    <script>
-        function openSidebar() {
-            const btn = window.parent.document.querySelector('[data-testid="collapsedControl"]');
-            if (btn) btn.click();
-        }
-    </script>
-    
-    <!-- The Button -->
-    <div class="custom-sidebar-trigger" onclick="
-        var btn = window.parent.document.querySelector('[data-testid=\'collapsedControl\']');
-        if (btn) {
-             btn.click();
-        } else {
-             // Fallback: Dispatch 'c' key
-             window.parent.document.dispatchEvent(new KeyboardEvent('keypress', {'key': 'c'}));
-        }
-    ">
-        ☰
-    </div>
-    """, unsafe_allow_html=True)
+# --- PAGE SETUP ---
+# Custom Sidebar Toggle Removed (Reverting to Native)
 
 # --- Page Configuration ---
 st.set_page_config(
@@ -248,7 +198,6 @@ with st.sidebar:
 st.markdown(get_live_filter_css(filter_option, mirror_mode), unsafe_allow_html=True)
 
 # --- Main Layout ---
-add_sidebar_toggle() # Inject custom sidebar button
 spacer_l, center_col, spacer_r = st.columns([1, 2, 1])
 
 with center_col:
