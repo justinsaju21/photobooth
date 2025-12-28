@@ -94,79 +94,94 @@ def load_emoji_font(size=60):
 
 # --- FILTER FUNCTIONS ---
 # --- FILTER FUNCTIONS ---
-def apply_sepia(image):
-    # Authentic Faded Sepia
-    gray = ImageOps.grayscale(image)
-    # Colorize: Deep brown shadows, warm paper highlights
-    sepia = ImageOps.colorize(gray, "#2A1D0D", "#FDF6E3") 
-    enhancer = ImageEnhance.Contrast(sepia)
-    sepia = enhancer.enhance(0.9)
-    enhancer = ImageEnhance.Brightness(sepia)
-    return enhancer.enhance(1.05)
+# --- PROFESSIONAL FILM STOCK FILTERS ---
 
-def apply_bw(image):
-    # High Contrast Silver Gelatin look
+def apply_kodak_portra(image):
+    # Warm, soft, natural. Rich skin tones.
     gray = ImageOps.grayscale(image)
-    enhancer = ImageEnhance.Contrast(gray)
-    gray = enhancer.enhance(1.3)
-    enhancer = ImageEnhance.Brightness(gray)
+    # Shadows: Deep Brown, Highlights: Warm Cream
+    portra = ImageOps.colorize(gray, "#2D1C10", "#FFF6E5")
+    img = Image.blend(image, portra, 0.4)
+    enhancer = ImageEnhance.Contrast(img)
+    img = enhancer.enhance(1.05)
+    enhancer = ImageEnhance.Color(img)
     return enhancer.enhance(1.1)
 
-def apply_warm_retro(image):
-    # Warm, slightly overexposed cross-processed look
-    gray = ImageOps.grayscale(image)
-    warm = ImageOps.colorize(gray, "#2D1C02", "#FFF9E5")
-    img = Image.blend(image, warm, 0.6)
+def apply_fuji_velvia(image):
+    # High saturation, vivid greens/blues, deep blacks.
+    img = image.copy()
+    enhancer = ImageEnhance.Contrast(img)
+    img = enhancer.enhance(1.2)
     enhancer = ImageEnhance.Color(img)
+    img = enhancer.enhance(1.6)
+    # Cool the shadows slightly
+    gray = ImageOps.grayscale(image)
+    cyan = ImageOps.colorize(gray, "#001A1A", "#FFFFFF")
+    return Image.blend(img, cyan, 0.1)
+
+def apply_polaroid_600(image):
+    # Faded, warm, slightly blurry, aesthetic.
+    gray = ImageOps.grayscale(image)
+    # Shadow: Muted Blueish, Highlights: Warm Rose
+    polaroid = ImageOps.colorize(gray, "#1A1A2E", "#FFFDF5")
+    img = Image.blend(image, polaroid, 0.5)
+    img = img.filter(ImageFilter.GaussianBlur(0.3))
+    enhancer = ImageEnhance.Contrast(img)
+    img = enhancer.enhance(0.85)
+    enhancer = ImageEnhance.Brightness(img)
+    return enhancer.enhance(1.1)
+
+def apply_ilford_hp5(image):
+    # Classic Grainy B&W
+    img = ImageOps.grayscale(image)
+    enhancer = ImageEnhance.Contrast(img)
+    img = enhancer.enhance(1.5)
+    # Add grain/noise
+    img = img.convert("RGB")
+    noise = np.random.randint(0, 30, (img.size[1], img.size[0], 3), dtype='uint8')
+    noise_img = Image.fromarray(noise).convert("RGB")
+    return Image.blend(img, noise_img, 0.1)
+
+def apply_cine_teal(image):
+    # Teal/Orange Hollywood look
+    gray = ImageOps.grayscale(image)
+    # Shadows: Deep Teal, Highlights: Hot Orange
+    teal_orange = ImageOps.colorize(gray, "#002B36", "#FF8C00")
+    img = Image.blend(image, teal_orange, 0.3)
+    enhancer = ImageEnhance.Contrast(img)
+    img = enhancer.enhance(1.2)
+    enhancer = ImageEnhance.Color(img)
+    return enhancer.enhance(1.3)
+
+def apply_lomography(image):
+    # Yellowish color shift, high contrast
+    gray = ImageOps.grayscale(image)
+    lomo = ImageOps.colorize(gray, "#2D2D00", "#FFFFD0")
+    img = Image.blend(image, lomo, 0.4)
+    enhancer = ImageEnhance.Contrast(img)
     img = enhancer.enhance(1.4)
-    enhancer = ImageEnhance.Contrast(img)
-    return enhancer.enhance(1.1)
-
-def apply_grain(image):
-    # Faded 70s Newsprint look
-    gray = ImageOps.grayscale(image)
-    faded = ImageOps.colorize(gray, "#201A15", "#E8D8C8")
-    img = Image.blend(image, faded, 0.7)
     enhancer = ImageEnhance.Color(img)
-    img = enhancer.enhance(0.7)
-    enhancer = ImageEnhance.Contrast(img)
-    return enhancer.enhance(1.2)
+    return enhancer.enhance(1.8)
 
-def apply_soft_glow(image):
-    # Dreamy, blooming highlights
-    glow = image.filter(ImageFilter.GaussianBlur(3))
-    img = Image.blend(image, glow, 0.3)
+def apply_kodachrome(image):
+    # Saturated reds, contrasty vintage magazine look
+    img = image.copy()
+    enhancer = ImageEnhance.Contrast(img)
+    img = enhancer.enhance(1.2)
+    enhancer = ImageEnhance.Color(img)
+    img = enhancer.enhance(1.3)
+    # Red boost
+    r, g, b = img.split()
+    r = r.point(lambda i: i * 1.1)
+    return Image.merge("RGB", (r, g, b))
+
+def apply_dramatic_noir(image):
+    # Gritty, deep shadows
+    img = ImageOps.grayscale(image)
+    enhancer = ImageEnhance.Contrast(img)
+    img = enhancer.enhance(2.2)
     enhancer = ImageEnhance.Brightness(img)
-    img = enhancer.enhance(1.15)
-    enhancer = ImageEnhance.Contrast(img)
-    return enhancer.enhance(0.9)
-
-def apply_cool_cinema(image):
-    # Cold Blue Cinema look
-    gray = ImageOps.grayscale(image)
-    cold = ImageOps.colorize(gray, "#000810", "#E0F0FF") 
-    img = Image.blend(image, cold, 0.5)
-    enhancer = ImageEnhance.Contrast(img)
-    return enhancer.enhance(1.2)
-
-def apply_vintage_rose(image):
-    # Aesthetics Pink/Rose tint
-    gray = ImageOps.grayscale(image)
-    rose = ImageOps.colorize(gray, "#2D0A14", "#FFE5E5")
-    img = Image.blend(image, rose, 0.4)
-    enhancer = ImageEnhance.Brightness(img)
-    img = enhancer.enhance(1.1)
-    enhancer = ImageEnhance.Contrast(img)
-    return enhancer.enhance(0.9)
-
-def apply_dramatic(image):
-    # Gritty, High Contrast Noir
-    gray = ImageOps.grayscale(image)
-    enhancer = ImageEnhance.Contrast(gray)
-    img = enhancer.enhance(1.8)
-    enhancer = ImageEnhance.Brightness(img)
-    return enhancer.enhance(0.8) 
-
+    return enhancer.enhance(0.7).convert("RGB")
 def process_image(image, filter_name, flip=False):
     """Process image with cropping, resizing, flipping, and filters"""
     # Ensure square crop
@@ -185,22 +200,22 @@ def process_image(image, filter_name, flip=False):
         image = ImageOps.mirror(image)
 
     # Apply filter
-    if filter_name == "Sepia":
-        return apply_sepia(image)
-    elif filter_name == "Black & White":
-        return apply_bw(image)
-    elif filter_name == "Warm Retro":
-        return apply_warm_retro(image)
-    elif filter_name == "1970s Grain":
-        return apply_grain(image)
-    elif filter_name == "Soft Glow":
-        return apply_soft_glow(image)
-    elif filter_name == "Cool Cinema":
-        return apply_cool_cinema(image)
-    elif filter_name == "Vintage Rose":
-        return apply_vintage_rose(image)
+    if filter_name == "Kodak Portra 400":
+        return apply_kodak_portra(image)
+    elif filter_name == "Fuji Velvia":
+        return apply_fuji_velvia(image)
+    elif filter_name == "Polaroid 600":
+        return apply_polaroid_600(image)
+    elif filter_name == "Ilford HP5 (B&W)":
+        return apply_ilford_hp5(image)
+    elif filter_name == "Cine-Teal & Orange":
+        return apply_cine_teal(image)
+    elif filter_name == "Lomography":
+        return apply_lomography(image)
+    elif filter_name == "Kodachrome":
+        return apply_kodachrome(image)
     elif filter_name == "Dramatic Noir":
-        return apply_dramatic(image)
+        return apply_dramatic_noir(image)
     
     return image
 

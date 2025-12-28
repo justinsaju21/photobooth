@@ -31,22 +31,30 @@ def get_live_filter_css(filter_name, mirror):
     transform = "scaleX(-1)" if mirror else "scaleX(1)"
     filters = ""
     
-    if filter_name == "Sepia":
-        filters = "sepia(1) contrast(0.9) brightness(1.05) saturate(1.2) hue-rotate(-10deg)"
-    elif filter_name == "Black & White":
-        filters = "grayscale(1) contrast(1.3) brightness(1.1)"
+    if filter_name == "Kodak Portra 400":
+        # Warm, slightly bright, natural saturation
+        filters = "brightness(1.05) saturate(1.1) sepia(0.1) contrast(1.1)"
+    elif filter_name == "Fuji Velvia":
+        # Vivid, deep shadows, punchy colors
+        filters = "contrast(1.25) saturate(1.8) hue-rotate(-5deg) brightness(0.95)"
+    elif filter_name == "Polaroid 600":
+        # Faded, warm tint, soft shadows
+        filters = "sepia(0.2) brightness(1.1) contrast(0.85) saturate(0.9) blur(0.3px)"
+    elif filter_name == "Ilford HP5 (B&W)":
+        # Grainy B&W, heavy contrast
+        filters = "grayscale(1) contrast(1.5) brightness(1.1)"
+    elif filter_name == "Cine-Teal & Orange":
+        # Blockbuster look: Teal shadows, warm highlights
+        filters = "hue-rotate(180deg) sepia(0.1) contrast(1.2) saturate(1.3) hue-rotate(185deg)"
+    elif filter_name == "Lomography":
+        # Hyper-saturated, yellow/green shifts
+        filters = "saturate(2) contrast(1.4) hue-rotate(10deg) sepia(0.1)"
+    elif filter_name == "Kodachrome":
+        # Red punch, vintage magazine feel
+        filters = "contrast(1.2) brightness(0.9) saturate(1.4) hue-rotate(-15deg)"
     elif filter_name == "Dramatic Noir":
-        filters = "grayscale(1) contrast(1.8) brightness(0.8) blur(0.2px)"
-    elif filter_name == "Warm Retro":
-        filters = "sepia(0.5) contrast(1.1) saturate(1.4) hue-rotate(-20deg) brightness(1.05)"
-    elif filter_name == "Cool Cinema":
-        filters = "contrast(1.2) brightness(1.1) saturate(1.1) hue-rotate(185deg) sepia(0.1)"
-    elif filter_name == "Vintage Rose":
-         filters = "hue-rotate(330deg) sepia(0.2) saturate(1.2) contrast(0.9) brightness(1.1)"
-    elif filter_name == "1970s Grain":
-        filters = "sepia(0.3) saturate(0.7) contrast(1.2) brightness(0.95) hue-rotate(-10deg)" 
-    elif filter_name == "Soft Glow":
-        filters = "brightness(1.15) blur(1.5px) contrast(0.9) saturate(1.1)"
+        # Grit, deep blacks
+        filters = "grayscale(1) contrast(2) brightness(0.7) blur(0.2px)"
     else:
         filters = "none"
 
@@ -178,8 +186,8 @@ with st.sidebar:
     st.markdown("### 🎨 Aesthetics")
     filter_option = st.selectbox(
         "Film Stock:",
-        ("Original", "Sepia", "Black & White", "Dramatic Noir", "Warm Retro", "Cool Cinema", "Vintage Rose", "1970s Grain", "Soft Glow"),
-        index=4
+        ("Kodak Portra 400", "Fuji Velvia", "Polaroid 600", "Ilford HP5 (B&W)", "Cine-Teal & Orange", "Lomography", "Kodachrome", "Dramatic Noir", "Original"),
+        index=0
     )
     
     st.markdown("### ✍️ Customization")
