@@ -216,17 +216,19 @@ footer {
 /* NUCLEAR OPTION: Force Sidebar Toggle to always be visible and clickable */
 header {
     background: transparent !important;
+    visibility: visible !important;
+    /* Ensure parent is visible */
     pointer-events: none !important;
     /* Let clicks pass through empty header */
     z-index: 999999 !important;
-    /* Ensure it is on top of everything */
 }
 
-/* Re-enable clicks on the toggle button */
-header[data-testid="stHeader"]>div:first-child {
+/* Re-enable clicks on the toggle button & Make sure it is visible */
+[data-testid="collapsedControl"] {
     pointer-events: auto !important;
     visibility: visible !important;
     display: block !important;
+    opacity: 1 !important;
 }
 
 /* --- SECURITY & PRIVACY --- */
