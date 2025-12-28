@@ -10,6 +10,8 @@ def load_font(size=40, font_type="regular", style="Modern Sans"):
     """
     Robust font loading with expanded style support.
     """
+    candidates = []
+    
     # Pre-check common system font paths for Linux (Streamlit Cloud)
     system_font_dirs = [
         "/usr/share/fonts/truetype/liberation/",
