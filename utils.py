@@ -8,80 +8,50 @@ import platform
 # --- FONT HELPERS ---
 def load_font(size=40, font_type="regular", style="Modern Sans"):
     """
-    Robust font loading with expanded style support.
+    Robust font loading with expanded style support using local assets.
     """
     candidates = []
     
-    # Pre-check common system font paths for Linux (Streamlit Cloud)
-    system_font_dirs = [
-        "/usr/share/fonts/truetype/liberation/",
-        "/usr/share/fonts/truetype/dejavu/",
-        "/usr/share/fonts/truetype/freefont/"
-    ]
-
-    # Map style names to font families with Linux priorities
+    # Map style names to bundled Google Fonts (Guaranteed to exist)
     if style == "Classic Serif":
-        # Look for specific high-quality serif fonts first
-        candidates.extend([
-            "assets/PlayfairDisplay-Bold.ttf",
-            "LiberationSerif-Regular.ttf", "DejaVuSerif.ttf", "Times New Roman.ttf", "times.ttf",
-            "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf",
-            "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"
-        ])
+        candidates.append("assets/PlayfairDisplay-Bold.ttf") # Primary
+        candidates.extend(["Times New Roman.ttf", "LiberationSerif-Regular.ttf"])
         
     elif style == "Retro Typewriter":
-        candidates.extend([
-            "Courier New.ttf", "cour.ttf", 
-            "LiberationMono-Regular.ttf", "DejaVuSansMono.ttf",
-            "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf"
-        ])
+        candidates.append("assets/CourierPrime-Regular.ttf") # Primary
+        candidates.extend(["Courier New.ttf", "LiberationMono-Regular.ttf"])
         
     elif style == "Elegant Script":
-        # Hard to find scripts on Linux standard, try fallback to italic serif
-        candidates.extend([
-            "Brush Script MT.ttf", "Lucida Handwriting.ttf",
-            "LiberationSerif-Italic.ttf", "DejaVuSerif-Italic.ttf",
-            "URWBookman-L-Italic.ttf"
-        ])
+        candidates.append("assets/GreatVibes-Regular.ttf") # Primary
+        candidates.extend(["Brush Script MT.ttf", "LiberationSerif-Italic.ttf"])
         
     elif style == "Bold Display":
-        candidates.extend([
-            "Impact.ttf", "impact.ttf", "Arial Bold.ttf", 
-            "LiberationSans-Bold.ttf", "DejaVuSans-Bold.ttf"
-        ])
+        candidates.append("assets/Oswald-Bold.ttf") # Primary
+        candidates.extend(["Impact.ttf", "Arial Bold.ttf", "LiberationSans-Bold.ttf"])
         
     elif style == "Minimal":
-        candidates.extend([
-            "Calibri.ttf", "Arial.ttf", 
-            "LiberationSans-Regular.ttf", "DejaVuSans-ExtraLight.ttf"
-        ])
+        candidates.append("assets/Roboto-Light.ttf") # Primary
+        candidates.extend(["Calibri.ttf", "Arial.ttf", "LiberationSans-Regular.ttf"])
         
     elif style == "Gothic":
-        # Try finding a blackletter or heavy serif
-        candidates.extend([
-            "UnifrakturMaguntia-Book.ttf", "OldEnglish.ttf",
-            "LiberationSerif-Bold.ttf" # Fallback
-        ])
+        candidates.append("assets/UnifrakturMaguntia-Book.ttf") # Primary
+        candidates.extend(["OldEnglish.ttf", "LiberationSerif-Bold.ttf"])
 
     elif style == "Playful":
-       candidates.extend([
-            "Comic Sans MS.ttf", "Chalkboard.ttf",
-            "Purisa.ttf", "/usr/share/fonts/truetype/thai/Purisa.ttf", # Common on Linux
-            "LiberationSans-Regular.ttf"
-       ])
+       candidates.append("assets/PatrickHand-Regular.ttf") # Primary
+       candidates.extend(["Comic Sans MS.ttf", "Chalkboard.ttf", "LiberationSans-Regular.ttf"])
 
     else:  # "Modern Sans" (default)
-        candidates.extend([
-            "assets/Lato-Regular.ttf", "Arial.ttf", 
-            "LiberationSans-Regular.ttf", "DejaVuSans.ttf",
-            "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
-        ])
+        if font_type == "title":
+            candidates.append("assets/Lato-Regular.ttf")
+        candidates.append("assets/Lato-Regular.ttf")
+        candidates.extend(["Arial.ttf", "LiberationSans-Regular.ttf"])
 
-    # Universal Fallbacks (The "Kitchen Sink")
+    # Fallback System Paths (Linux/Windows)
     candidates.extend([
-        "FreeSerif.ttf", "FreeSans.ttf", "FreeMono.ttf",
-        "/usr/share/fonts/truetype/freefont/FreeSerif.ttf",
-        "/usr/share/fonts/truetype/freefont/FreeSans.ttf"
+        "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "FreeSans.ttf"
     ])
 
     for font_name in candidates:
@@ -90,7 +60,7 @@ def load_font(size=40, font_type="regular", style="Modern Sans"):
         except (OSError, IOError):
             continue
             
-    # Absolute last resort: Default bitmap font (ugly but works)
+    # Absolute last resort
     return ImageFont.load_default()
 
 def load_emoji_font(size=60):
