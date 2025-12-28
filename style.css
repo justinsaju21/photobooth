@@ -238,16 +238,20 @@ header[data-testid="stHeader"]>div:first-child {
     left: 10px !important;
     z-index: 1000000 !important;
     /* Only God is higher */
-    background-color: var(--primary-color) !important;
-    color: white !important;
+    background-color: #D4AF37 !important;
+    /* Solid Gold */
+    color: black !important;
+    /* High contrast black icon */
     border-radius: 8px !important;
     padding: 0.5rem !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4) !important;
     width: auto !important;
+    border: 2px solid white !important;
+    /* White border for pop */
 }
 
-/* Ensure the icon inside is white */
+/* Ensure the icon inside is high contrast */
 [data-testid="collapsedControl"] svg {
-    fill: white !important;
-    stroke: white !important;
+    fill: black !important;
+    stroke: black !important;
 }

@@ -192,9 +192,14 @@ def draw_stickers(draw, strip_width, strip_height, sticker_list, density):
                 x_pos = random.randint(strip_width - 80, strip_width - 20) 
                 
         try:
-            draw.text((x_pos, y_pos), symbol, font=font, fill="#404040", embedded_color=True)
-        except TypeError:
-            draw.text((x_pos, y_pos), symbol, font=font, fill="#404040")
+            # Try embedded color first (for colored emojis)
+            try:
+                draw.text((x_pos, y_pos), symbol, font=font, fill="#404040", embedded_color=True)
+            except TypeError:
+                # Fallback for standard PIL or non-supported fonts
+                draw.text((x_pos, y_pos), symbol, font=font, fill="#404040")
+        except Exception:
+            continue
 
 
 def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_color="#333", 
@@ -263,6 +268,7 @@ def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_col
 
     # Add text with selected font style
     font_title = load_font(60, "title", style=font_style)
+    # Ensure footer uses the same decorative style, but regular weight
     font_footer = load_font(40, "regular", style=font_style)
     
     draw.text((strip_w/2, 50), "PHOTOBOOTH", fill=text_color, font=font_title, anchor="mm")
@@ -273,6 +279,7 @@ def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_col
     if include_date:
         from datetime import datetime
         date_str = datetime.now().strftime("%Y-%m-%d")
+        # Ensure date also uses the selected style
         draw.text((strip_w/2, footer_y + 50), date_str, fill=text_color, 
                  font=load_font(25, "regular", style=font_style), anchor="mm")
         
