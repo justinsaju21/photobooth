@@ -6,61 +6,67 @@ import os
 import platform
 
 # --- FONT HELPERS ---
-def load_font(size=40, font_type="regular", style="Modern"):
+def load_font(size=40, font_type="regular", style="Modern Sans"):
     """
-    Robust font loading with Style support.
+    Robust font loading with expanded style support.
     """
     candidates = []
     
-    # style: "Modern" (Sans), "Classic" (Serif), "Retro" (Mono/Typewriter)
-    
-    if style == "Classic":
+    # Map style names to font families
+    if style == "Classic Serif":
         if font_type == "title":
             candidates.append("assets/PlayfairDisplay-Bold.ttf")
-        candidates.extend(["times.ttf", "LiberationSerif-Regular.ttf", "DejaVuSerif.ttf"])
+        candidates.extend(["times.ttf", "Times New Roman.ttf", "LiberationSerif-Regular.ttf", "DejaVuSerif.ttf"])
         
-    elif style == "Retro":
-        candidates.extend(["courier.ttf", "Courier New.ttf", "LiberationMono-Regular.ttf", "DejaVuSansMono.ttf"])
+    elif style == "Retro Typewriter":
+        candidates.extend(["cour.ttf", "courier.ttf", "Courier New.ttf", "LiberationMono-Regular.ttf", "DejaVuSansMono.ttf"])
         
-    else: # Modern (Default)
+    elif style == "Elegant Script":
+        # Try script fonts, fallback to serif
+        candidates.extend(["Brush Script MT.ttf", "Lucida Handwriting.ttf", "times.ttf", "LiberationSerif-Regular.ttf"])
+        
+    elif style == "Bold Display":
+        # Try impact/bold fonts
+        candidates.extend(["impact.ttf", "Impact.ttf", "arialbd.ttf", "Arial Bold.ttf", "LiberationSans-Bold.ttf"])
+        
+    elif style == "Minimal":
+        # Clean, thin fonts
+        candidates.extend(["calibri.ttf", "Calibri.ttf", "arial.ttf", "LiberationSans-Regular.ttf"])
+        
+    else:  # "Modern Sans" (default)
         if font_type == "title":
-            candidates.append("assets/PlayfairDisplay-Bold.ttf") # Keep fancy title for Modern? Or stick to Sans?
-            # actually, modern usually implies Sans title too. But the user liked the "Vintage" vibe.
-            # Let's keep Playfair for Title only if it's explicitly requested or maybe just use Lato/Sans for modern to be distinct.
-            # Let's make Modern purely Sans for contrast.
-            pass 
+            candidates.append("assets/Lato-Regular.ttf")
         candidates.append("assets/Lato-Regular.ttf")
-        candidates.extend(["arial.ttf", "LiberationSans-Regular.ttf", "DejaVuSans.ttf"])
+        candidates.extend(["arial.ttf", "Arial.ttf", "LiberationSans-Regular.ttf", "DejaVuSans.ttf"])
 
-    # Fallback to Lato if everything else fails (except for Retro where we really want Mono)
-    if style != "Retro":
+    # Always add Lato as final fallback
+    if "assets/Lato-Regular.ttf" not in candidates:
         candidates.append("assets/Lato-Regular.ttf")
 
     for font_name in candidates:
         try:
             return ImageFont.truetype(font_name, size)
-        except OSError:
+        except (OSError, IOError):
             continue
             
     return ImageFont.load_default()
 
 def load_emoji_font(size=60):
     """
-    Attempts to load a font capable of rendering emojis.
-    Fallback to bundled Lato for text, which solves "Boxes" for text stickers.
+    Load font capable of rendering emojis.
     """
     emoji_candidates = [
         "seguiemj.ttf",          # Windows 10+
         "NotoColorEmoji.ttf",    # Linux / Cloud
         "AppleColorEmoji.ttf",   # Mac
         "Symbola.ttf",
-        "assets/Lato-Regular.ttf" # Fallback to bundled font (renders text symbols at least)
+        "assets/Lato-Regular.ttf"
     ]
     
     for font_name in emoji_candidates:
         try:
             return ImageFont.truetype(font_name, size)
-        except OSError:
+        except (OSError, IOError):
             continue
             
     return ImageFont.load_default()
@@ -108,6 +114,8 @@ def apply_dramatic(image):
     return enhancer.enhance(1.6) 
 
 def process_image(image, filter_name, flip=False):
+    """Process image with cropping, resizing, flipping, and filters"""
+    # Ensure square crop
     if image.width != image.height:
         size = min(image.size)
         left = (image.width - size) / 2
@@ -118,9 +126,11 @@ def process_image(image, filter_name, flip=False):
     
     image = image.resize((600, 600))
     
+    # Apply mirror if requested
     if flip:
         image = ImageOps.mirror(image)
 
+    # Apply filter
     if filter_name == "Sepia":
         return apply_sepia(image)
     elif filter_name == "Black & White":
@@ -152,6 +162,7 @@ STICKER_PACKS = {
 }
 
 def draw_stickers(draw, strip_width, strip_height, sticker_list, density):
+    """Draw stickers on the strip borders"""
     if not sticker_list:
         return
 
@@ -163,6 +174,7 @@ def draw_stickers(draw, strip_width, strip_height, sticker_list, density):
         x_pos = random.randint(0, strip_width - 60)
         y_pos = random.randint(0, strip_height - 60)
         
+        # Bias towards edges
         if random.random() > 0.3: 
             if random.choice([True, False]):
                 x_pos = random.randint(0, 40) 
@@ -175,7 +187,10 @@ def draw_stickers(draw, strip_width, strip_height, sticker_list, density):
             draw.text((x_pos, y_pos), symbol, font=font, fill="#404040")
 
 
-def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_color="#333", include_date=False, custom_border_color=None, sticker_pack="None", custom_stickers="", sticker_density=5, font_style="Modern"):
+def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_color="#333", 
+                 include_date=False, custom_border_color=None, sticker_pack="None", 
+                 custom_stickers="", sticker_density=5, font_style="Modern Sans"):
+    """Create the final photo strip with all customizations"""
     photo_w, photo_h = 600, 600
     padding = 50
     header_h = 100
@@ -185,6 +200,7 @@ def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_col
     strip_w = photo_w + (padding * 2)
     strip_h = header_h + (num_photos * (photo_h + padding)) + footer_h
     
+    # Frame color selection
     bg_color = "#F5F1E8"
     if frame_style == "Black":
         bg_color = "#111111"
@@ -204,9 +220,11 @@ def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_col
     
     y_offset = header_h
     
+    # Auto-adjust text color for dark frames
     if frame_style in ["Black", "Film Noir"]:
         text_color = "#FFFFFF" if text_color == "#333" else text_color
     
+    # Paste photos
     for img in images:
         img = img.resize((photo_w, photo_h))
         if frame_style == "Film Noir":
@@ -217,22 +235,23 @@ def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_col
             strip.paste(img, (padding, y_offset))
         y_offset += photo_h + padding
 
-    # Stickers
+    # Collect stickers
     active_stickers = []
     if sticker_pack in STICKER_PACKS:
         active_stickers.extend(STICKER_PACKS[sticker_pack])
     
-    if custom_stickers:
+    # Parse custom stickers (comma-separated or single)
+    if custom_stickers and custom_stickers.strip():
         if "," in custom_stickers:
-            active_stickers.extend([s.strip() for s in custom_stickers.split(",")])
+            custom_list = [s.strip() for s in custom_stickers.split(",") if s.strip()]
+            active_stickers.extend(custom_list)
         else:
-            active_stickers.append(custom_stickers)
+            active_stickers.append(custom_stickers.strip())
             
     if active_stickers:
         draw_stickers(draw, strip_w, strip_h, active_stickers, sticker_density)
 
-    # Text using Styled Fonts
-    # Select title font based on chosen style
+    # Add text with selected font style
     font_title = load_font(60, "title", style=font_style)
     font_footer = load_font(40, "regular", style=font_style)
     
@@ -244,11 +263,13 @@ def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_col
     if include_date:
         from datetime import datetime
         date_str = datetime.now().strftime("%Y-%m-%d")
-        draw.text((strip_w/2, footer_y + 50), date_str, fill=text_color, font=load_font(25, "regular", style=font_style), anchor="mm")
+        draw.text((strip_w/2, footer_y + 50), date_str, fill=text_color, 
+                 font=load_font(25, "regular", style=font_style), anchor="mm")
         
     return strip 
 
 def convert_to_bytes(image):
+    """Convert PIL image to bytes for download"""
     buf = io.BytesIO()
     image.save(buf, format="PNG")
     byte_im = buf.getvalue()

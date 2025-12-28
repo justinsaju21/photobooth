@@ -19,12 +19,13 @@ def reset_session():
     st.session_state.captures = []
     st.session_state.temp_image = None
     st.session_state.step = 1
-    # Force a fresh uploader
     st.session_state.uploader_key += 1
 
 def get_live_filter_css(filter_name, mirror):
+    """Generate CSS for live camera preview with filters and mirroring"""
     transform = "scaleX(-1)" if mirror else "scaleX(1)"
     filters = ""
+    
     if filter_name == "Sepia":
         filters = "sepia(0.8) contrast(1.1)"
     elif filter_name == "Black & White":
@@ -46,19 +47,20 @@ def get_live_filter_css(filter_name, mirror):
 
     return f"""
     <style>
-        /* ROBUST CAMERA SIZING (V17) */
-        
-        /* Base: Mobile First / Default */
+        /* Camera Container Sizing */
         div[data-testid="stCameraInput"] {{
+            max-width: 500px !important;
             width: 100% !important;
             margin: 0 auto !important;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 4px solid #333;
+            border-radius: 12px !important;
+            overflow: hidden !important;
+            border: 4px solid #333 !important;
         }}
         
-        div[data-testid="stCameraInput"] > video {{
+        /* Video Element - Apply filters and mirror */
+        div[data-testid="stCameraInput"] video {{
             width: 100% !important;
+            height: auto !important;
             aspect-ratio: 1 / 1 !important;
             object-fit: cover !important;
             transform: {transform} !important;
@@ -66,6 +68,7 @@ def get_live_filter_css(filter_name, mirror):
             -webkit-filter: {filters} !important;
         }}
         
+        /* Camera Button Styling */
         div[data-testid="stCameraInput"] button {{
             color: #ffffff !important;
             background-color: #D4AF37 !important; 
@@ -75,17 +78,16 @@ def get_live_filter_css(filter_name, mirror):
             width: 100% !important;
         }}
         
-        /* RESPONSIVE CONSTRAINTS */
-        /* Limit size on small viewports to keep square */
-        @media (max-height: 800px) {{
+        /* Responsive adjustments */
+        @media (max-width: 768px) {{
             div[data-testid="stCameraInput"] {{
-                max-width: 60vh !important; /* use viewport height as reference */
+                max-width: 90vw !important;
             }}
         }}
         
-        @media (min-width: 1000px) {{
+        @media (max-height: 700px) {{
             div[data-testid="stCameraInput"] {{
-                max-width: 500px !important;
+                max-width: 50vh !important;
             }}
         }}
     </style>
@@ -125,12 +127,16 @@ with st.sidebar:
         custom_border_color = st.color_picker("Border Color", "#FCFAF6")
 
     st.markdown("### 🔤 Typography")
-    font_style = st.selectbox("Font Style:", ("Modern", "Classic", "Retro"), index=0)
+    font_style = st.selectbox(
+        "Font Style:", 
+        ("Modern Sans", "Classic Serif", "Retro Typewriter", "Elegant Script", "Bold Display", "Minimal"),
+        index=0
+    )
 
     # --- Sticker Feature ---
     st.markdown("### ✨ Decoration")
     sticker_pack = st.selectbox("Sticker Pack:", ["None", "Classic ❤️", "Vintage 🎞️", "Party 🎉", "Nature 🌸", "Love 💌", "Spooky 👻"])
-    custom_sticker = st.text_input("Custom Sticker (Emoji):", placeholder="e.g. 🐶")
+    custom_sticker = st.text_input("Custom Emojis:", placeholder="🐶,🎉,💕 (comma-separated)")
     sticker_density = st.slider("Decor Intensity:", 1, 10, 3)
 
     st.markdown("### 📝 Strip Footer")
@@ -147,9 +153,8 @@ with st.sidebar:
         reset_session()
         st.rerun()
 
-# --- Live Filter Injection ---
+# --- Inject Live Filter CSS ---
 st.markdown(get_live_filter_css(filter_option, mirror_mode), unsafe_allow_html=True)
-
 
 # --- Main Layout ---
 spacer_l, center_col, spacer_r = st.columns([1, 2, 1])
@@ -180,14 +185,12 @@ with center_col:
              with col_rev1:
                  if st.button("❌ Retake", use_container_width=True):
                      st.session_state.temp_image = None
-                     # Fresh key for uploader so it clears
                      st.session_state.uploader_key += 1
                      st.rerun()
              with col_rev2:
                  if st.button("✅ Keep It", type="primary", use_container_width=True):
                      st.session_state.captures.append(st.session_state.temp_image)
                      st.session_state.temp_image = None
-                     # Fresh key for uploader so it clears for NEXT pose
                      st.session_state.uploader_key += 1
                      st.rerun()
         else:
@@ -195,21 +198,18 @@ with center_col:
             tab1, tab2 = st.tabs(["📷 Camera", "📤 Upload"])
             
             with tab1:
-                camera_key = f"cam_{current_count}"
+                camera_key = f"cam_{current_count}_{st.session_state.uploader_key}"
                 photo = st.camera_input("Pose!", key=camera_key, label_visibility="collapsed")
                 
                 if photo:
-                    # Save to temp for review
                     st.session_state.temp_image = Image.open(photo)
                     st.rerun()
                     
             with tab2:
-                # Dynamic key ensures it resets when we ask it to (Retake/Next Pose)
                 upload_key = f"uploader_{st.session_state.uploader_key}"
-                uploaded = st.file_uploader("Upload Image", type=['jpg', 'png'], key=upload_key, label_visibility="collapsed")
+                uploaded = st.file_uploader("Upload Image", type=['jpg', 'png', 'jpeg'], key=upload_key, label_visibility="collapsed")
                 
                 if uploaded:
-                    # AUTO PROCESS - No button needed
                     try:
                         img = Image.open(uploaded)
                         st.session_state.temp_image = img
