@@ -2,28 +2,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap');
 
 :root {
-    --primary-color: #D4AF37;
-    /* Cinematic Gold */
-    --secondary-color: #F5F1E8;
-    /* Cream */
-    --text-color: #2C2C2C;
-    /* Soft Black for Light Mode */
-    --accent-color: #8B5E3C;
-    /* Warm Brown */
-    --bg-color: #BFBFBF;
-    /* MEDIUM GREY BACKGROUND */
-    --booth-bg: #111;
+    --primary-gold: #E8B44C;
+    /* Warm Gold */
+    --primary-gold-hover: #F0C674;
+    /* Lighter Gold on hover */
+    --accent-coral: #FF9A8B;
+    /* Soft Coral for cute touches */
+    --bg-cream: #FAF8F3;
+    /* Soft Cream Background */
+    --bg-white: #FFFFFF;
+    /* Pure White for cards */
+    --text-dark: #2C3E50;
+    /* Dark Charcoal */
+    --text-muted: #7D8A99;
+    /* Muted Grey for secondary text */
+    --border-light: #E8E4DC;
+    /* Light Border */
+    --shadow-soft: rgba(0, 0, 0, 0.08);
+    /* Soft Shadow */
+    --shadow-medium: rgba(0, 0, 0, 0.12);
+    /* Medium Shadow */
+    --booth-bg: #1A1A1A;
+    /* Camera background */
 }
 
 /* --- GLOBAL THEME ENFORCEMENT --- */
 [data-testid="stAppViewContainer"] {
-    background-color: var(--bg-color) !important;
-    color: var(--text-color) !important;
+    background: linear-gradient(135deg, var(--bg-cream) 0%, #FFF9F0 100%) !important;
+    color: var(--text-dark) !important;
 }
 
 [data-testid="stSidebar"] {
-    background-color: #ffffff !important;
-    border-right: 1px solid #e0e0e0;
+    background-color: var(--bg-white) !important;
+    border-right: 2px solid var(--border-light) !important;
+    box-shadow: 4px 0 12px var(--shadow-soft) !important;
 }
 
 /* Typography Defaults */
@@ -40,7 +52,7 @@ h5,
 h6,
 li {
     font-family: 'Lato', sans-serif;
-    color: var(--text-color);
+    color: var(--text-dark);
 }
 
 h1,
@@ -51,10 +63,18 @@ h5,
 h6 {
     font-family: 'Playfair Display', serif;
     font-weight: 700;
+    color: var(--primary-gold);
+}
+
+h1 {
+    font-size: 2.5rem !important;
+    text-shadow: 3px 3px 0px rgba(255, 255, 255, 0.8),
+        1px 1px 2px var(--shadow-soft);
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem !important;
 }
 
 /* Sidebar Specifics */
-/* Headers and labels */
 [data-testid="stSidebar"] p,
 [data-testid="stSidebar"] span,
 [data-testid="stSidebar"] label,
@@ -157,36 +177,10 @@ ul[data-baseweb="menu"] li span {
 }
 
 .stTabs [aria-selected="true"] {
-    background-color: var(--primary-color) !important;
-    color: #ffffff !important;
-    border: 1px solid var(--primary-color);
-    font-weight: bold;
-}
-
-/* --- BUTTON UNIFORMITY FIX --- */
-.stButton>button,
-.stDownloadButton>button {
-    background-color: var(--primary-color) !important;
-    color: #ffffff !important;
-    border: none !important;
-    border-radius: 30px !important;
-    font-weight: bold !important;
-    letter-spacing: 1px !important;
-    padding: 0.5rem 1.5rem !important;
-    text-transform: uppercase !important;
-    font-size: 0.9rem !important;
-    transition: all 0.2s !important;
-    margin-top: 0.5rem !important;
-    width: 100%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.stButton>button:hover,
-.stDownloadButton>button:hover {
-    transform: scale(1.02) !important;
-    box-shadow: 0 6px 12px rgba(212, 175, 55, 0.4) !important;
-    background-color: #c5a028 !important;
-    color: #ffffff !important;
+    background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-gold-hover) 100%) !important;
+    border-color: var(--primary-gold) !important;
+    color: white !important;
+    box-shadow: 0 2px 8px var(--shadow-soft) !important;
 }
 
 /* File Uploader Button - Ensure Visibility */
@@ -199,14 +193,16 @@ ul[data-baseweb="menu"] li span {
 
 /* Camera Input Styling */
 div[data-testid="stCameraInput"] {
-    border: 3px solid #D4AF37 !important;
-    /* Gold Border to match theme */
-    border-radius: 12px;
-    /* Softer corners */
+    border: 4px solid transparent !important;
+    background: linear-gradient(white, white) padding-box,
+        linear-gradient(135deg, var(--primary-gold), var(--accent-coral)) border-box !important;
+    border-radius: 16px !important;
     overflow: hidden;
-    background-color: #000;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    /* Lift it off the page */
+    background-color: var(--booth-bg) !important;
+    box-shadow: 0 8px 24px var(--shadow-soft),
+        0 4px 12px var(--shadow-medium),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
+    padding: 4px !important;
 }
 
 /* Title Polish */
@@ -236,8 +232,6 @@ header {
 
 /* Re-enable clicks on the toggle button & Make sure it is visible */
 /* --- SIDEBAR TOGGLE --- */
-/* Target BOTH potential IDs for the toggle button */
-/* Target ALL potential selectors for the toggle button (both states) */
 [data-testid="collapsedControl"],
 [data-testid="stSidebarCollapsedControl"],
 [data-testid="stExpandSidebarButton"],
@@ -245,33 +239,28 @@ header {
 button[title="Expand sidebar"],
 button[title="Collapse sidebar"] {
     visibility: visible !important;
-    display: block !important;
+    display: flex !important;
     position: fixed !important;
     top: 20px !important;
     left: 20px !important;
     z-index: 2147483647 !important;
-    /* Max Z-Index */
 
-    background-color: #D4AF37 !important;
-    /* Gold Background */
-    color: #000000 !important;
-    /* Black Text/Icon */
-    border: 2px solid #000000 !important;
-    /* Black Border */
+    background: linear-gradient(135deg, var(--accent-coral) 0%, var(--primary-gold) 100%) !important;
+    color: white !important;
+    border: 3px solid white !important;
     border-radius: 50% !important;
     padding: 0 !important;
-    width: 48px !important;
-    height: 48px !important;
+    width: 52px !important;
+    height: 52px !important;
 
-    /* Center the icon */
-    display: flex !important;
     align-items: center !important;
     justify-content: center !important;
 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 4px 12px var(--shadow-medium),
+        0 2px 6px var(--shadow-soft) !important;
     cursor: pointer !important;
     pointer-events: auto !important;
-    transition: transform 0.2s ease !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 [data-testid="collapsedControl"]:hover,
@@ -280,9 +269,9 @@ button[title="Collapse sidebar"] {
 [data-testid="stCollapseSidebarButton"]:hover,
 button[title="Expand sidebar"]:hover,
 button[title="Collapse sidebar"]:hover {
-    transform: scale(1.1) !important;
-    background-color: #F4C430 !important;
-    /* Brighter Gold on hover */
+    transform: scale(1.08) rotate(5deg) !important;
+    box-shadow: 0 6px 16px var(--shadow-medium),
+        0 3px 8px var(--shadow-soft) !important;
 }
 
 /* Force Icon to be BLACK via currentColor */
