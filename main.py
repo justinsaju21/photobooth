@@ -6,67 +6,56 @@ import utils
 # --- PAGE SETUP ---
 # Sidebar Toggle Component (Robust Logic)
 def add_sidebar_toggle():
-    components.html("""
+    st.markdown("""
     <style>
-        .open-btn {
+        .custom-sidebar-trigger {
             position: fixed;
             top: 20px;
             left: 20px;
-            width: 45px;
-            height: 45px;
-            background-color: black;
-            color: white;
+            width: 50px;
+            height: 50px;
+            background-color: #000000 !important;
+            color: #D4AF37 !important;
+            border: 2px solid #D4AF37 !important;
             border-radius: 50%;
-            border: 2px solid #D4AF37;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
+            z-index: 2147483647 !important; /* MAX INT to override everything */
             cursor: pointer;
-            z-index: 999999;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
-            transition: transform 0.2s;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            user-select: none;
+            text-decoration: none;
+            font-family: sans-serif;
         }
-        .open-btn:hover {
+        .custom-sidebar-trigger:hover {
             transform: scale(1.1);
+            background-color: #111 !important;
         }
     </style>
-    <div class="open-btn" onclick="toggleSidebar()">
-        ➤
-    </div>
+    
+    <!-- JS to click the internal button -->
     <script>
-        function toggleSidebar() {
-            try {
-                // Target parent window (Streamlit App)
-                const doc = window.parent.document;
-                
-                // Attempt to find the toggle button using multiple known selectors
-                const selectors = [
-                    '[data-testid="collapsedControl"]',
-                    '[data-testid="stSidebarCollapsedControl"]',
-                    'button[kind="header"]' // Fallback for very new versions
-                ];
-                
-                let btn = null;
-                for (let s of selectors) {
-                    btn = doc.querySelector(s);
-                    if (btn) break;
-                }
-                
-                if (btn) {
-                    btn.click();
-                } else {
-                    console.log("Sidebar toggle not found. Attempting keyboard shortcut.");
-                    // Dispatch 'c' key for sidebar
-                    const event = new KeyboardEvent('keypress', { 'key': 'c' });
-                    doc.dispatchEvent(event);
-                }
-            } catch (e) {
-                console.error("Sidebar toggle failed:", e);
-            }
+        function openSidebar() {
+            const btn = window.parent.document.querySelector('[data-testid="collapsedControl"]');
+            if (btn) btn.click();
         }
     </script>
-    """, height=0, width=0)
+    
+    <!-- The Button -->
+    <div class="custom-sidebar-trigger" onclick="
+        var btn = window.parent.document.querySelector('[data-testid=\'collapsedControl\']');
+        if (btn) {
+             btn.click();
+        } else {
+             // Fallback: Dispatch 'c' key
+             window.parent.document.dispatchEvent(new KeyboardEvent('keypress', {'key': 'c'}));
+        }
+    ">
+        ☰
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- Page Configuration ---
 st.set_page_config(
