@@ -213,6 +213,21 @@ footer {
     visibility: hidden;
 }
 
+/* Keep sidebar toggle button visible */
 header {
+    visibility: visible !important;
+}
+
+/* But hide everything else in header except the toggle */
+header[data-testid="stHeader"]>div:not([data-testid="collapsedControl"]) {
     visibility: hidden;
+}
+
+/* Ensure the sidebar toggle button is always visible and styled */
+button[kind="header"] {
+    visibility: visible !important;
+    background-color: var(--primary-color) !important;
+    color: white !important;
+    border-radius: 8px !important;
+    padding: 8px !important;
 }
