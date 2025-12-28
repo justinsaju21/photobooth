@@ -12,33 +12,35 @@ def load_font(size=40, font_type="regular", style="Modern Sans"):
     """
     candidates = []
     
-    # Map style names to bundled Google Fonts (Guaranteed to exist)
+    # Map style names to bundled Google Fonts
     if style == "Classic Serif":
-        candidates.append("assets/PlayfairDisplay-Bold.ttf") # Primary
-        candidates.extend(["Times New Roman.ttf", "LiberationSerif-Regular.ttf"])
+        # System fallbacks for Serif as assets are missing
+        candidates.extend(["Times New Roman.ttf", "Georgia.ttf", "LiberationSerif-Regular.ttf", "DejaVuSerif.ttf"])
+        candidates.append("assets/Lato-Regular.ttf") # Clean fallback
         
     elif style == "Retro Typewriter":
-        candidates.append("assets/CourierPrime-Regular.ttf") # Primary
+        candidates.append("assets/CourierPrime-Regular.ttf") # Primary (Exists)
         candidates.extend(["Courier New.ttf", "LiberationMono-Regular.ttf"])
         
     elif style == "Elegant Script":
-        candidates.append("assets/GreatVibes-Regular.ttf") # Primary
+        candidates.append("assets/GreatVibes-Regular.ttf") # Primary (Exists)
         candidates.extend(["Brush Script MT.ttf", "LiberationSerif-Italic.ttf"])
         
     elif style == "Bold Display":
-        candidates.append("assets/Oswald-Bold.ttf") # Primary
-        candidates.extend(["Impact.ttf", "Arial Bold.ttf", "LiberationSans-Bold.ttf"])
+        # System fallbacks for Bold as assets are missing
+        candidates.extend(["Impact.ttf", "Arial Bold.ttf", "Verdana Bold.ttf", "LiberationSans-Bold.ttf"])
+        candidates.append("assets/Lato-Regular.ttf") # Clean fallback
         
     elif style == "Minimal":
-        candidates.append("assets/Roboto-Light.ttf") # Primary
+        candidates.append("assets/Lato-Regular.ttf") # Primary (Exists - fits Minimal style well)
         candidates.extend(["Calibri.ttf", "Arial.ttf", "LiberationSans-Regular.ttf"])
         
     elif style == "Gothic":
-        candidates.append("assets/UnifrakturMaguntia-Book.ttf") # Primary
+        candidates.append("assets/UnifrakturMaguntia-Book.ttf") # Primary (Exists)
         candidates.extend(["OldEnglish.ttf", "LiberationSerif-Bold.ttf"])
-
+        
     elif style == "Playful":
-       candidates.append("assets/PatrickHand-Regular.ttf") # Primary
+       candidates.append("assets/PatrickHand-Regular.ttf") # Primary (Exists)
        candidates.extend(["Comic Sans MS.ttf", "Chalkboard.ttf", "LiberationSans-Regular.ttf"])
 
     else:  # "Modern Sans" (default)
