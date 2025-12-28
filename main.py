@@ -74,15 +74,15 @@ def get_live_filter_css(filter_name, mirror):
         }}
         
         /* Ensure Sidebar Toggle is Visible & Interactive */
-        header[data-testid="stHeader"] {
+        header[data-testid="stHeader"] {{
             visibility: visible !important;
             background: transparent !important;
             z-index: 1000 !important;
             pointer-events: none !important; /* Allow clicks to pass through the empty header bar */
-        }
+        }}
         
         /* The Toggle Button Itself */
-        [data-testid="collapsedControl"] {
+        [data-testid="collapsedControl"] {{
             visibility: visible !important;
             display: block !important;
             z-index: 1001 !important;
@@ -93,10 +93,10 @@ def get_live_filter_css(filter_name, mirror):
             border: 1px solid #D4AF37 !important;
             margin-top: 10px !important;
             margin-left: 10px !important;
-        }
+        }}
         
         /* Camera Button */
-        div[data-testid="stCameraInput"] button {
+        div[data-testid="stCameraInput"] button {{
             position: absolute !important;
             bottom: 0 !important;
             left: 0 !important;
