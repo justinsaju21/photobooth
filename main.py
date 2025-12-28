@@ -166,14 +166,11 @@ with st.sidebar:
     if frame_style == "Custom":
         custom_border_color = st.color_picker("Border Color", "#FCFAF6")
 
-    # --- Sticker Feature ---
+    # --- Pattern Feature (Replaces Stickers) ---
     st.markdown("### ✨ Decoration")
-    sticker_pack = st.selectbox("Sticker Pack:", ["None", "Classic ❤️", "Vintage 🎞️", "Party 🎉", "Nature 🌸", "Love 💌", "Spooky 👻"], key="sticker_pack_select")
+    pattern_type = st.selectbox("Border Pattern:", ["None", "Polka Dots", "Stars", "Confetti", "Minimal Lines"], key="pattern_select")
     
-    # Custom Emoji Input - Ensure robust key
-    custom_sticker = st.text_input("Custom Emojis:", placeholder="🐶,🎉,💕 (comma-separated)", key="custom_emoji_input", help="Type emojis here (Win+.) or paste them")
-    
-    sticker_density = st.slider("Decor Intensity:", 1, 10, 3, key="sticker_density_slider")
+    sticker_density = st.slider("Pattern Intensity:", 1, 10, 5, key="pattern_density_slider")
 
     st.markdown("### 📝 Strip Footer")
     footer_text = st.text_input("Footer Text:", value="Little Vintage Photobooth", key="footer_text_input")
