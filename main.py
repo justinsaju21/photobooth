@@ -180,18 +180,19 @@ with st.sidebar:
     st.image("assets/logo.png", use_container_width=True)
     st.markdown("### 🛠️ Booth Settings")
     
-    strip_length = st.radio("Photos per Strip:", (3, 4), horizontal=True)
-    mirror_mode = st.toggle("Mirror Camera", value=True)
+    strip_length = st.radio("Photos per Strip:", (3, 4), horizontal=True, key="strip_len_radio")
+    mirror_mode = st.toggle("Mirror Camera", value=True, key="mirror_toggle")
     
     st.markdown("### 🎨 Aesthetics")
     filter_option = st.selectbox(
         "Film Stock:",
         ("Kodak Portra 400", "Fuji Velvia", "Polaroid 600", "Ilford HP5 (B&W)", "Cine-Teal & Orange", "Lomography", "Kodachrome", "Dramatic Noir", "Original"),
-        index=0
+        index=0,
+        key="filter_select"
     )
     
     st.markdown("### ✍️ Customization")
-    frame_style = st.selectbox("Frame Style:", ("Cream", "Black", "Film Noir", "Gold", "Rose", "Neon", "Custom"))
+    frame_style = st.selectbox("Frame Style:", ("Cream", "Black", "Film Noir", "Gold", "Rose", "Neon", "Custom"), key="frame_select")
     
     custom_border_color = None
     if frame_style == "Custom":
@@ -276,7 +277,7 @@ with center_col:
                 photo = st.camera_input("Pose!", key=camera_key, label_visibility="collapsed")
                 
                 if photo:
-                    st.session_state.temp_image = Image.open(photo)
+                    st.session_state.temp_image = Image.open(photo).copy()
                     st.rerun()
                     
             with tab2:
@@ -285,7 +286,7 @@ with center_col:
                 
                 if uploaded:
                     try:
-                        img = Image.open(uploaded)
+                        img = Image.open(uploaded).copy()
                         st.session_state.temp_image = img
                         st.rerun()
                     except Exception as e:

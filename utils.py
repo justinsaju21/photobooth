@@ -49,6 +49,9 @@ def load_font(size=40, font_type="regular", style="Modern Sans"):
         candidates.append("assets/Lato-Regular.ttf")
         candidates.extend(["arial.ttf", "Arial.ttf", "Helvetica.ttf"])
 
+    # Absolute last resort - provide a sensible fallback list
+    candidates.extend(["arial.ttf", "Arial.ttf", "georgia.ttf", "times.ttf", "cour.ttf", "segoeui.ttf"])
+    
     # Load first available font
     for font_path in candidates:
         try:
@@ -56,7 +59,6 @@ def load_font(size=40, font_type="regular", style="Modern Sans"):
         except Exception:
             continue
     
-    # Absolute last resort
     return ImageFont.load_default()
 
 def load_emoji_font(size=60):
@@ -187,6 +189,7 @@ def process_image(image, filter_name, flip=False):
         bottom = (image.height + size) / 2
         image = image.crop((left, top, right, bottom))
     
+    image = image.convert("RGB")
     image = image.resize((600, 600))
     
     # Apply mirror if requested
@@ -196,29 +199,27 @@ def process_image(image, filter_name, flip=False):
     # Robust filter matching
     name = str(filter_name).lower().strip()
     
-    if "portra" in name:
+    if "portra" in name or "kodak" in name:
         return apply_kodak_portra(image)
-    elif "velvia" in name:
+    if "velvia" in name or "fuji" in name:
         return apply_fuji_velvia(image)
-    elif "polaroid" in name:
+    if "polaroid" in name:
         return apply_polaroid_600(image)
-    elif "hp5" in name or "b&w" in name or "black" in name:
+    if "hp5" in name or "b&w" in name or "black" in name or "mono" in name:
         return apply_ilford_hp5(image)
-    elif "teal" in name:
+    if "teal" in name or "cine" in name:
         return apply_cine_teal(image)
-    elif "lomo" in name:
+    if "lomo" in name:
         return apply_lomography(image)
-    elif "kodachrome" in name:
+    if "kodachrome" in name:
         return apply_kodachrome(image)
-    elif "noir" in name:
+    if "noir" in name or "dramatic" in name:
         return apply_dramatic_noir(image)
     
-    # Handle older names for compatibility if session state persists
-    if "sepia" in name:
-        return apply_kodak_portra(image) # Map to warm
-    elif "warm" in name:
+    # Handle older names for compatibility
+    if "sepia" in name or "warm" in name:
         return apply_kodak_portra(image)
-    elif "cool" in name or "cinema" in name:
+    if "cool" in name or "cinema" in name:
         return apply_cine_teal(image)
     
     return image
