@@ -47,56 +47,70 @@ def get_live_filter_css(filter_name, mirror):
 
     return f"""
     <style>
-
-        /* Camera Container Sizing */
+    return f"""
+    <style>
+        /* Camera Container Sizing - Enforce Square Aspect Ratio on Container */
         div[data-testid="stCameraInput"] {{
-            max-width: 500px !important;
             width: 100% !important;
+            max-width: 500px !important;
+            aspect-ratio: 1 / 1 !important; /* Force square shape on container */
             margin: 0 auto !important;
             border-radius: 12px !important;
             overflow: hidden !important;
             border: 4px solid #333 !important;
-            /* Prevent expansion */
-            max-height: 500px !important;
+            position: relative !important;
+            background-color: black !important;
         }}
         
-        /* Video Element - Apply filters and mirror */
+        /* Video - Fill the Square Container */
         div[data-testid="stCameraInput"] video {{
             width: 100% !important;
             height: 100% !important;
-            min-height: 100% !important;
-            max-height: 100% !important;
-            aspect-ratio: 1 / 1 !important;
-            object-fit: cover !important;
-            object-position: center center !important;
+            object-fit: cover !important; /* Crop to fill square */
+            object-position: center center !important; /* Match Python crop */
             transform: {transform} !important;
             filter: {filters} !important;
             -webkit-filter: {filters} !important;
             display: block !important;
         }}
         
-        /* Camera Button Styling */
+        /* Ensure Sidebar Toggle is Visible (Backup to style.css) */
+        header[data-testid="stHeader"] {{
+            visibility: visible !important;
+            background: transparent !important;
+            z-index: 99999 !important;
+        }}
+        header[data-testid="stHeader"] > div:first-child {{
+            visibility: visible !important;
+        }}
+        
+        /* Camera Button */
         div[data-testid="stCameraInput"] button {{
+            position: absolute !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            z-index: 10 !important;
             color: #ffffff !important;
             background-color: #D4AF37 !important; 
             border: none !important;
             font-weight: bold !important;
             text-transform: uppercase !important;
-            width: 100% !important;
+            border-radius: 0 !important; 
+            padding: 10px !important;
         }}
         
-        /* Responsive adjustments */
+        /* Responsive */
         @media (max-width: 768px) {{
             div[data-testid="stCameraInput"] {{
                 max-width: 90vw !important;
-                max-height: 90vw !important;
             }}
         }}
         
         @media (max-height: 800px) {{
             div[data-testid="stCameraInput"] {{
-                max-width: 60vh !important;
                 max-height: 60vh !important;
+                 max-width: 60vh !important; /* Keep square */
             }}
         }}
     </style>
