@@ -10,8 +10,8 @@
     /* Soft Black for Light Mode */
     --accent-color: #8B5E3C;
     /* Warm Brown */
-    --bg-color: #E5E5E5;
-    /* LIGHT GREY BACKGROUND */
+    --bg-color: #BFBFBF;
+    /* MEDIUM GREY BACKGROUND */
     --booth-bg: #111;
 }
 
@@ -228,7 +228,8 @@ header {
 /* Target BOTH potential IDs for the toggle button */
 /* Target ALL potential selectors for the toggle button (Closed State) */
 [data-testid="collapsedControl"],
-[data-testid="stSidebarCollapsedControl"] {
+[data-testid="stSidebarCollapsedControl"],
+header button:first-of-type {
     visibility: visible !important;
     display: block !important;
     position: fixed !important;
@@ -260,7 +261,8 @@ header {
 }
 
 [data-testid="collapsedControl"]:hover,
-[data-testid="stSidebarCollapsedControl"]:hover {
+[data-testid="stSidebarCollapsedControl"]:hover,
+header button:first-of-type:hover {
     transform: scale(1.1) !important;
     background-color: #F4C430 !important;
     /* Brighter Gold on hover */
@@ -269,8 +271,10 @@ header {
 /* Force Icon to be BLACK */
 [data-testid="collapsedControl"] svg,
 [data-testid="stSidebarCollapsedControl"] svg,
+header button:first-of-type svg,
 [data-testid="collapsedControl"] svg path,
-[data-testid="stSidebarCollapsedControl"] svg path {
+[data-testid="stSidebarCollapsedControl"] svg path,
+header button:first-of-type svg path {
     fill: #000000 !important;
     stroke: #000000 !important;
     color: #000000 !important;
