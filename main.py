@@ -46,27 +46,37 @@ def get_live_filter_css(filter_name, mirror):
 
     return f"""
     <style>
+        /* TARGETED VIDEO FIX */
+        /* Instead of forcing the container (which holds the button) to be square/weird,
+           we only force the VIDEO element to handle aspect ratio. */
+           
         div[data-testid="stCameraInput"] {{
-            width: 450px !important;
-            margin: 0 auto !important; 
+            width: 100% !important;
+            max-width: 500px !important;
+            margin: 0 auto !important;
             border-radius: 12px;
             overflow: hidden;
             border: 4px solid #333;
+            /* Do NOT force height here, let it grow to fit content (video + button) */
         }}
-        div[data-testid="stCameraInput"] video {{
-            width: 450px !important;
-            height: 450px !important;
-            object-fit: cover !important; 
+        
+        div[data-testid="stCameraInput"] > video {{
+            width: 100% !important;
+            /* Force Aspect Ratio on VIDEO only */
+            aspect-ratio: 1 / 1 !important;
+            object-fit: cover !important;
             transform: {transform} !important;
             filter: {filters} !important;
             -webkit-filter: {filters} !important;
         }}
+        
         div[data-testid="stCameraInput"] button {{
             color: #ffffff !important;
             background-color: #D4AF37 !important; 
             border: none !important;
             font-weight: bold !important;
             text-transform: uppercase !important;
+            width: 100% !important;
         }}
     </style>
     """
