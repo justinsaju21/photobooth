@@ -284,13 +284,12 @@ with center_col:
             text_color=text_color,
             include_date=include_date,
             custom_border_color=custom_border_color,
-            sticker_pack=sticker_pack,
-            custom_stickers=custom_sticker,
+            pattern_type=pattern_type,
             sticker_density=sticker_density,
             font_style=font_style
         )
         
-        st.image(final_strip, caption=f"{filter_option} • {frame_style} • {sticker_pack}", use_container_width=True)
+        st.image(final_strip, caption=f"{filter_option} • {frame_style} • {pattern_type}", use_container_width=True)
         
         # Controls
         c1, c2 = st.columns(2)
