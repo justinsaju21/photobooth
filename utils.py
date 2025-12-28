@@ -12,56 +12,50 @@ def load_font(size=40, font_type="regular", style="Modern Sans"):
     """
     candidates = []
     
+    family = style.lower().strip()
+    
     # Map style names to bundled Google Fonts
-    if style == "Classic Serif":
+    if family == "classic serif":
         # System fallbacks for Serif as assets are missing
-        candidates.extend(["Times New Roman.ttf", "Georgia.ttf", "LiberationSerif-Regular.ttf", "DejaVuSerif.ttf"])
+        candidates.extend(["times.ttf", "Times New Roman.ttf", "georgia.ttf", "Georgia.ttf", "LiberationSerif-Regular.ttf", "DejaVuSerif.ttf"])
         candidates.append("assets/Lato-Regular.ttf") # Clean fallback
         
-    elif style == "Retro Typewriter":
+    elif family == "retro typewriter":
         candidates.append("assets/CourierPrime-Regular.ttf") # Primary (Exists)
-        candidates.extend(["Courier New.ttf", "LiberationMono-Regular.ttf"])
+        candidates.extend(["cour.ttf", "Courier New.ttf", "LiberationMono-Regular.ttf"])
         
-    elif style == "Elegant Script":
+    elif family == "elegant script":
         candidates.append("assets/GreatVibes-Regular.ttf") # Primary (Exists)
-        candidates.extend(["Brush Script MT.ttf", "LiberationSerif-Italic.ttf"])
+        candidates.extend(["brushsci.ttf", "Brush Script MT.ttf", "LiberationSerif-Italic.ttf"])
         
-    elif style == "Bold Display":
+    elif family == "bold display":
         # System fallbacks for Bold as assets are missing
-        candidates.extend(["Impact.ttf", "Arial Bold.ttf", "Verdana Bold.ttf", "LiberationSans-Bold.ttf"])
+        candidates.extend(["impact.ttf", "Impact.ttf", "ariblk.ttf", "Arial Bold.ttf", "Verdana Bold.ttf", "LiberationSans-Bold.ttf"])
         candidates.append("assets/Lato-Regular.ttf") # Clean fallback
         
-    elif style == "Minimal":
+    elif family == "minimal":
         candidates.append("assets/Lato-Regular.ttf") # Primary (Exists - fits Minimal style well)
-        candidates.extend(["Calibri.ttf", "Arial.ttf", "LiberationSans-Regular.ttf"])
+        candidates.extend(["arial.ttf", "Arial.ttf", "segoeui.ttf", "Calibri.ttf", "LiberationSans-Regular.ttf"])
         
-    elif style == "Gothic":
+    elif family == "gothic":
         candidates.append("assets/UnifrakturMaguntia-Book.ttf") # Primary (Exists)
-        candidates.extend(["OldEnglish.ttf", "LiberationSerif-Bold.ttf"])
+        candidates.extend(["oldenglish.ttf", "OldEnglish.ttf", "LiberationSerif-Bold.ttf"])
         
-    elif style == "Playful":
+    elif family == "playful":
        candidates.append("assets/PatrickHand-Regular.ttf") # Primary (Exists)
-       candidates.extend(["Comic Sans MS.ttf", "Chalkboard.ttf", "LiberationSans-Regular.ttf"])
+       candidates.extend(["comic.ttf", "Comic Sans MS.ttf", "Chalkboard.ttf", "LiberationSans-Regular.ttf"])
 
     else:  # "Modern Sans" (default)
-        if font_type == "title":
-            candidates.append("assets/Lato-Regular.ttf")
         candidates.append("assets/Lato-Regular.ttf")
-        candidates.extend(["Arial.ttf", "LiberationSans-Regular.ttf"])
+        candidates.extend(["arial.ttf", "Arial.ttf", "Helvetica.ttf"])
 
-    # Fallback System Paths (Linux/Windows)
-    candidates.extend([
-        "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        "FreeSans.ttf"
-    ])
-
-    for font_name in candidates:
+    # Load first available font
+    for font_path in candidates:
         try:
-            return ImageFont.truetype(font_name, size)
-        except (OSError, IOError):
+            return ImageFont.truetype(font_path, size)
+        except Exception:
             continue
-            
+    
     # Absolute last resort
     return ImageFont.load_default()
 
@@ -199,23 +193,33 @@ def process_image(image, filter_name, flip=False):
     if flip:
         image = ImageOps.mirror(image)
 
-    # Apply filter
-    if filter_name == "Kodak Portra 400":
+    # Robust filter matching
+    name = str(filter_name).lower().strip()
+    
+    if "portra" in name:
         return apply_kodak_portra(image)
-    elif filter_name == "Fuji Velvia":
+    elif "velvia" in name:
         return apply_fuji_velvia(image)
-    elif filter_name == "Polaroid 600":
+    elif "polaroid" in name:
         return apply_polaroid_600(image)
-    elif filter_name == "Ilford HP5 (B&W)":
+    elif "hp5" in name or "b&w" in name or "black" in name:
         return apply_ilford_hp5(image)
-    elif filter_name == "Cine-Teal & Orange":
+    elif "teal" in name:
         return apply_cine_teal(image)
-    elif filter_name == "Lomography":
+    elif "lomo" in name:
         return apply_lomography(image)
-    elif filter_name == "Kodachrome":
+    elif "kodachrome" in name:
         return apply_kodachrome(image)
-    elif filter_name == "Dramatic Noir":
+    elif "noir" in name:
         return apply_dramatic_noir(image)
+    
+    # Handle older names for compatibility if session state persists
+    if "sepia" in name:
+        return apply_kodak_portra(image) # Map to warm
+    elif "warm" in name:
+        return apply_kodak_portra(image)
+    elif "cool" in name or "cinema" in name:
+        return apply_cine_teal(image)
     
     return image
 
