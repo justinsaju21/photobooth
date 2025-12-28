@@ -47,6 +47,7 @@ def get_live_filter_css(filter_name, mirror):
 
     return f"""
     <style>
+
         /* Camera Container Sizing */
         div[data-testid="stCameraInput"] {{
             max-width: 500px !important;
@@ -55,17 +56,23 @@ def get_live_filter_css(filter_name, mirror):
             border-radius: 12px !important;
             overflow: hidden !important;
             border: 4px solid #333 !important;
+            /* Prevent expansion */
+            max-height: 500px !important;
         }}
         
         /* Video Element - Apply filters and mirror */
         div[data-testid="stCameraInput"] video {{
             width: 100% !important;
-            height: auto !important;
+            height: 100% !important;
+            min-height: 100% !important;
+            max-height: 100% !important;
             aspect-ratio: 1 / 1 !important;
             object-fit: cover !important;
+            object-position: center center !important;
             transform: {transform} !important;
             filter: {filters} !important;
             -webkit-filter: {filters} !important;
+            display: block !important;
         }}
         
         /* Camera Button Styling */
@@ -82,12 +89,14 @@ def get_live_filter_css(filter_name, mirror):
         @media (max-width: 768px) {{
             div[data-testid="stCameraInput"] {{
                 max-width: 90vw !important;
+                max-height: 90vw !important;
             }}
         }}
         
-        @media (max-height: 700px) {{
+        @media (max-height: 800px) {{
             div[data-testid="stCameraInput"] {{
-                max-width: 50vh !important;
+                max-width: 60vh !important;
+                max-height: 60vh !important;
             }}
         }}
     </style>

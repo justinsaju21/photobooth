@@ -205,6 +205,7 @@ div[data-testid="stCameraInput"] {
 }
 
 /* Hide Streamlit Elements */
+/* Hide Streamlit Elements */
 #MainMenu {
     visibility: hidden;
 }
@@ -213,21 +214,13 @@ footer {
     visibility: hidden;
 }
 
-/* Keep sidebar toggle button visible */
+/* Ensure header is visible so sidebar toggle works */
 header {
     visibility: visible !important;
+    background-color: transparent !important;
 }
 
-/* But hide everything else in header except the toggle */
-header[data-testid="stHeader"]>div:not([data-testid="collapsedControl"]) {
-    visibility: hidden;
-}
-
-/* Ensure the sidebar toggle button is always visible and styled */
-button[kind="header"] {
-    visibility: visible !important;
-    background-color: var(--primary-color) !important;
-    color: white !important;
-    border-radius: 8px !important;
-    padding: 8px !important;
+/* Optional: Hide the colorful decoration line if desired, but keep the buttons */
+header[data-testid="stHeader"] {
+    background: transparent;
 }
