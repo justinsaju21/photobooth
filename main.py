@@ -185,7 +185,7 @@ with st.sidebar:
     st.markdown("### 🔤 Typography")
     font_style = st.selectbox(
         "Font Style:", 
-        ("Modern Sans", "Classic Serif", "Retro Typewriter", "Elegant Script", "Bold Display", "Minimal"),
+        ("Modern Sans", "Classic Serif", "Retro Typewriter", "Elegant Script", "Bold Display", "Minimal", "Gothic", "Playful"),
         index=0,
         key="font_style_select"
     )
