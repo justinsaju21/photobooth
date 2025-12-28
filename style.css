@@ -213,19 +213,41 @@ footer {
     visibility: hidden;
 }
 
+/* NUCLEAR OPTION: Force Sidebar Toggle to always be visible and clickable */
 header {
-    visibility: visible !important;
-}
-
-header[data-testid="stHeader"] {
     background: transparent !important;
-    z-index: 100 !important;
+    pointer-events: none !important;
+    /* Let clicks pass through empty header */
+    z-index: 999999 !important;
+    /* Ensure it is on top of everything */
 }
 
-/* Explicitly show the sidebar toggle button */
-button[kind="header"] {
+/* Re-enable clicks on the toggle button */
+header[data-testid="stHeader"]>div:first-child {
+    pointer-events: auto !important;
     visibility: visible !important;
+    display: block !important;
+}
+
+[data-testid="collapsedControl"] {
+    visibility: visible !important;
+    display: block !important;
+    position: fixed !important;
+    /* Force it to stay */
+    top: 10px !important;
+    left: 10px !important;
+    z-index: 1000000 !important;
+    /* Only God is higher */
     background-color: var(--primary-color) !important;
     color: white !important;
-    border-radius: 5px !important;
+    border-radius: 8px !important;
+    padding: 0.5rem !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+    width: auto !important;
+}
+
+/* Ensure the icon inside is white */
+[data-testid="collapsedControl"] svg {
+    fill: white !important;
+    stroke: white !important;
 }
