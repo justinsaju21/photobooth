@@ -2,40 +2,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap');
 
 :root {
-    --primary-gold: #E8B44C;
-    /* Warm Gold */
-    --primary-gold-hover: #F0C674;
-    /* Lighter Gold on hover */
-    --accent-coral: #FF9A8B;
-    /* Soft Coral for cute touches */
-    --bg-cream: #FAF8F3;
-    /* Soft Cream Background */
-    --bg-white: #FFFFFF;
-    /* Pure White for cards */
-    --text-dark: #2C3E50;
-    /* Dark Charcoal */
-    --text-muted: #7D8A99;
-    /* Muted Grey for secondary text */
-    --border-light: #E8E4DC;
-    /* Light Border */
-    --shadow-soft: rgba(0, 0, 0, 0.08);
-    /* Soft Shadow */
-    --shadow-medium: rgba(0, 0, 0, 0.12);
-    /* Medium Shadow */
-    --booth-bg: #1A1A1A;
-    /* Camera background */
+    --primary-main: #9F8BAB;
+    /* Sophisticated Lavender */
+    --primary-light: #C3B1CE;
+    /* Soft Lavender */
+    --accent-cute: #FFB7B2;
+    /* Pastel Rose/Coral */
+    --bg-main: #FDFBFF;
+    /* Clean Airy White/Lavender tint */
+    --bg-card: #FFFFFF;
+    --text-main: #4A4E69;
+    /* Deep Muted Purple/Grey */
+    --text-muted: #9A8C98;
+    /* Soft Muted Tone */
+    --border-soft: #F0EDF5;
+    --success: #84A59D;
+    /* Muted Sage for 'Keep It' */
+    --danger: #E07A5F;
+    /* Muted Terracotta for 'Retake' */
+    --shadow-cute: rgba(159, 139, 171, 0.15);
 }
 
 /* --- GLOBAL THEME ENFORCEMENT --- */
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(135deg, var(--bg-cream) 0%, #FFF9F0 100%) !important;
-    color: var(--text-dark) !important;
+    background-color: var(--bg-main) !important;
+    color: var(--text-main) !important;
 }
 
 [data-testid="stSidebar"] {
-    background-color: var(--bg-white) !important;
-    border-right: 2px solid var(--border-light) !important;
-    box-shadow: 4px 0 12px var(--shadow-soft) !important;
+    background-color: var(--bg-card) !important;
+    border-right: 1px solid var(--border-soft) !important;
+    box-shadow: 2px 0 10px var(--shadow-cute) !important;
 }
 
 /* Typography Defaults */
@@ -63,15 +60,18 @@ h5,
 h6 {
     font-family: 'Playfair Display', serif;
     font-weight: 700;
-    color: var(--primary-gold);
+    color: var(--primary-main);
 }
 
 h1 {
-    font-size: 2.5rem !important;
-    text-shadow: 3px 3px 0px rgba(255, 255, 255, 0.8),
-        1px 1px 2px var(--shadow-soft);
-    letter-spacing: 2px;
-    margin-bottom: 1.5rem !important;
+    font-size: 2.8rem !important;
+    text-align: center;
+    letter-spacing: 1px;
+    margin-bottom: 2rem !important;
+    background: linear-gradient(to right, var(--primary-main), var(--accent-cute));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 /* Sidebar Specifics */
@@ -132,30 +132,27 @@ ul[data-baseweb="menu"] li span {
     color: #f0f0f0 !important;
 }
 
-/* Main Title */
+/* Main Title Helper */
 .main-title {
     text-align: center;
-    font-size: 2.2rem;
-    color: var(--primary-color) !important;
-    margin-top: -1rem;
-    margin-bottom: 0.5rem;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    font-weight: 900;
+    margin-bottom: 2rem;
 }
 
-/* Booth Status */
+/* Booth Status (Pose indicator) */
 .booth-status {
-    background-color: var(--primary-color);
+    background-color: var(--primary-light);
     color: white !important;
     text-align: center;
-    font-weight: bold;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    padding: 0.5rem;
-    border-radius: 10px 10px 0 0;
-    margin-bottom: -5px;
+    letter-spacing: 1.5px;
+    padding: 8px;
+    border-radius: 12px 12px 0 0;
+    margin-bottom: -1px;
     position: relative;
     z-index: 10;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 /* --- TAB VISIBILITY FIX --- */
@@ -166,21 +163,46 @@ ul[data-baseweb="menu"] li span {
 }
 
 .stTabs [data-baseweb="tab"] {
-    height: 45px;
-    background-color: #444 !important;
-    color: #ffffff !important;
-    border-radius: 6px 6px 0 0;
+    height: 48px;
+    background-color: var(--bg-white) !important;
+    color: var(--text-muted) !important;
+    border-radius: 8px 8px 0 0;
     font-size: 1rem;
-    padding: 5px 20px;
-    border: 1px solid #555;
-    opacity: 1 !important;
+    padding: 5px 24px;
+    border: 1px solid var(--border-light);
+    border-bottom: none;
+    transition: all 0.2s ease;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+    color: var(--primary-gold) !important;
+    background-color: #fff !important;
 }
 
 .stTabs [aria-selected="true"] {
-    background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-gold-hover) 100%) !important;
-    border-color: var(--primary-gold) !important;
+    background-color: var(--primary-main) !important;
     color: white !important;
-    box-shadow: 0 2px 8px var(--shadow-soft) !important;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 4px 10px var(--shadow-cute) !important;
+}
+
+/* Force Button Text to be White for Contrast */
+.stButton button,
+.stDownloadButton button {
+    color: white !important;
+    text-shadow: none !important;
+    border-radius: 20px !important;
+    font-weight: 500 !important;
+}
+
+/* Special styling for "Retake" vs "Keep It" if we can catch them by context */
+/* Since they are often 1st and 2nd columns */
+div[data-testid="column"]:nth-of-type(1) button {
+    background-color: var(--danger) !important;
+}
+
+div[data-testid="column"]:nth-of-type(2) button {
+    background-color: var(--success) !important;
 }
 
 /* File Uploader Button - Ensure Visibility */
@@ -193,16 +215,11 @@ ul[data-baseweb="menu"] li span {
 
 /* Camera Input Styling */
 div[data-testid="stCameraInput"] {
-    border: 4px solid transparent !important;
-    background: linear-gradient(white, white) padding-box,
-        linear-gradient(135deg, var(--primary-gold), var(--accent-coral)) border-box !important;
-    border-radius: 16px !important;
+    border: 2px solid var(--primary-light) !important;
+    border-radius: 20px !important;
     overflow: hidden;
-    background-color: var(--booth-bg) !important;
-    box-shadow: 0 8px 24px var(--shadow-soft),
-        0 4px 12px var(--shadow-medium),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
-    padding: 4px !important;
+    background-color: #000;
+    box-shadow: 0 10px 25px var(--shadow-cute) !important;
 }
 
 /* Title Polish */
@@ -245,7 +262,7 @@ button[title="Collapse sidebar"] {
     left: 20px !important;
     z-index: 2147483647 !important;
 
-    background: linear-gradient(135deg, var(--accent-coral) 0%, var(--primary-gold) 100%) !important;
+    background: linear-gradient(135deg, var(--primary-main) 0%, var(--accent-cute) 100%) !important;
     color: white !important;
     border: 3px solid white !important;
     border-radius: 50% !important;
