@@ -235,13 +235,14 @@ header {
     z-index: 2147483647 !important;
     /* Max Z-Index */
 
-    background-color: #000000 !important;
-    color: #FFFFFF !important;
-    border: 1px solid #D4AF37 !important;
-    /* Gold border for visibility */
+    background-color: #D4AF37 !important;
+    /* Gold Background */
+    color: #000000 !important;
+    /* Black Text/Icon */
+    border: 2px solid #000000 !important;
+    /* Black Border */
     border-radius: 50% !important;
     padding: 0 !important;
-    /* Reset padding */
     width: 48px !important;
     height: 48px !important;
 
@@ -259,14 +260,18 @@ header {
 [data-testid="collapsedControl"]:hover,
 [data-testid="stSidebarCollapsedControl"]:hover {
     transform: scale(1.1) !important;
-    background-color: #222 !important;
+    background-color: #F4C430 !important;
+    /* Brighter Gold on hover */
 }
 
+/* Force Icon to be BLACK */
 [data-testid="collapsedControl"] svg,
-[data-testid="stSidebarCollapsedControl"] svg {
-    fill: #FFFFFF !important;
-    stroke: #FFFFFF !important;
-    color: #FFFFFF !important;
+[data-testid="stSidebarCollapsedControl"] svg,
+[data-testid="collapsedControl"] svg path,
+[data-testid="stSidebarCollapsedControl"] svg path {
+    fill: #000000 !important;
+    stroke: #000000 !important;
+    color: #000000 !important;
     width: 24px !important;
     height: 24px !important;
 }
