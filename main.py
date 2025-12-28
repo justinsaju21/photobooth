@@ -166,30 +166,35 @@ with st.sidebar:
     if frame_style == "Custom":
         custom_border_color = st.color_picker("Border Color", "#FCFAF6")
 
+    # --- Sticker Feature ---
+    st.markdown("### ✨ Decoration")
+    sticker_pack = st.selectbox("Sticker Pack:", ["None", "Classic ❤️", "Vintage 🎞️", "Party 🎉", "Nature 🌸", "Love 💌", "Spooky 👻"], key="sticker_pack_select")
+    
+    # Custom Emoji Input - Ensure robust key
+    custom_sticker = st.text_input("Custom Emojis:", placeholder="🐶,🎉,💕 (comma-separated)", key="custom_emoji_input", help="Type emojis here (Win+.) or paste them")
+    
+    sticker_density = st.slider("Decor Intensity:", 1, 10, 3, key="sticker_density_slider")
+
+    st.markdown("### 📝 Strip Footer")
+    footer_text = st.text_input("Footer Text:", value="Little Vintage Photobooth", key="footer_text_input")
+    
+    col_c1, col_c2 = st.columns([1, 3])
+    with col_c1:
+        text_color = st.color_picker("Text Color", "#303030", key="text_color_picker")
+    with col_c2:
+        include_date = st.checkbox("Include Date", value=False, key="include_date_check")
+
+    # Typography Moved to End
     st.markdown("### 🔤 Typography")
     font_style = st.selectbox(
         "Font Style:", 
         ("Modern Sans", "Classic Serif", "Retro Typewriter", "Elegant Script", "Bold Display", "Minimal"),
-        index=0
+        index=0,
+        key="font_style_select"
     )
-
-    # --- Sticker Feature ---
-    st.markdown("### ✨ Decoration")
-    sticker_pack = st.selectbox("Sticker Pack:", ["None", "Classic ❤️", "Vintage 🎞️", "Party 🎉", "Nature 🌸", "Love 💌", "Spooky 👻"])
-    custom_sticker = st.text_input("Custom Emojis:", placeholder="🐶,🎉,💕 (comma-separated)")
-    sticker_density = st.slider("Decor Intensity:", 1, 10, 3)
-
-    st.markdown("### 📝 Strip Footer")
-    footer_text = st.text_input("Footer Text:", value="Little Vintage Photobooth")
-    
-    col_c1, col_c2 = st.columns([1, 3])
-    with col_c1:
-        text_color = st.color_picker("Text Color", "#303030")
-    with col_c2:
-        include_date = st.checkbox("Include Date", value=False)
         
     st.markdown("---")
-    if st.button("🔄 Reset / New Session", type="primary", use_container_width=True):
+    if st.button("🔄 Reset / New Session", type="primary", use_container_width=True, key="reset_button"):
         reset_session()
         st.rerun()
 

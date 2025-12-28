@@ -43,6 +43,9 @@ def load_font(size=40, font_type="regular", style="Modern Sans"):
     if "assets/Lato-Regular.ttf" not in candidates:
         candidates.append("assets/Lato-Regular.ttf")
 
+    # System generic fallbacks
+    candidates.extend(["FreeSerif.ttf", "FreeSans.ttf", "DejaVuSans.ttf"])
+
     for font_name in candidates:
         try:
             return ImageFont.truetype(font_name, size)
@@ -53,19 +56,26 @@ def load_font(size=40, font_type="regular", style="Modern Sans"):
 
 def load_emoji_font(size=60):
     """
-    Load font capable of rendering emojis.
+    Load font capable of rendering emojis, targeting Streamlit Cloud (Linux) specifically.
     """
     emoji_candidates = [
-        "seguiemj.ttf",          # Windows 10+
-        "NotoColorEmoji.ttf",    # Linux / Cloud
-        "AppleColorEmoji.ttf",   # Mac
+        # Streamlit Cloud / Debian / Ubuntu paths
+        "/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf",
+        "/usr/share/fonts/noto/NotoColorEmoji.ttf",
+        "NotoColorEmoji.ttf",    
+        "AppleColorEmoji.ttf",   
+        "seguiemj.ttf",          
         "Symbola.ttf",
+        # Fallback to standard fonts that might have some symbols
+        "DejaVuSans.ttf",
+        "FreeSans.ttf",
         "assets/Lato-Regular.ttf"
     ]
     
     for font_name in emoji_candidates:
         try:
-            return ImageFont.truetype(font_name, size)
+            # Need to specify layout engine for some emoji fonts
+            return ImageFont.truetype(font_name, size) 
         except (OSError, IOError):
             continue
             
