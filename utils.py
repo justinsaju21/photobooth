@@ -178,9 +178,26 @@ def apply_dramatic_noir(image):
     img = enhancer.enhance(2.2)
     enhancer = ImageEnhance.Brightness(img)
     return enhancer.enhance(0.7).convert("RGB")
+# --- FILTER MAPPING ---
+FILTER_MAP = {
+    "Kodak Portra 400": apply_kodak_portra,
+    "Fuji Velvia": apply_fuji_velvia,
+    "Polaroid 600": apply_polaroid_600,
+    "Ilford HP5 (B&W)": apply_ilford_hp5,
+    "Cine-Teal & Orange": apply_cine_teal,
+    "Lomography": apply_lomography,
+    "Kodachrome": apply_kodachrome,
+    "Dramatic Noir": apply_dramatic_noir,
+    "Original": lambda x: x
+}
+
 def process_image(image, filter_name, flip=False):
     """Process image with cropping, resizing, flipping, and filters"""
-    # Ensure square crop
+    # 1. Normalize to RGB immediately to prevent mode conflicts
+    if image.mode != "RGB":
+        image = image.convert("RGB")
+
+    # 2. Square Crop
     if image.width != image.height:
         size = min(image.size)
         left = (image.width - size) / 2
@@ -189,40 +206,35 @@ def process_image(image, filter_name, flip=False):
         bottom = (image.height + size) / 2
         image = image.crop((left, top, right, bottom))
     
-    image = image.convert("RGB")
-    image = image.resize((600, 600))
+    # 3. Resize
+    image = image.resize((600, 600), Image.Resampling.LANCZOS)
     
-    # Apply mirror if requested
+    # 4. Mirror
     if flip:
         image = ImageOps.mirror(image)
 
-    # Robust filter matching
-    name = str(filter_name).lower().strip()
+    # 5. Apply Filter using Direct Mapping
+    # Default to Original if key missing or partial match failure
+    filter_func = FILTER_MAP.get(filter_name)
     
-    if "portra" in name or "kodak" in name:
-        return apply_kodak_portra(image)
-    if "velvia" in name or "fuji" in name:
-        return apply_fuji_velvia(image)
-    if "polaroid" in name:
-        return apply_polaroid_600(image)
-    if "hp5" in name or "b&w" in name or "black" in name or "mono" in name:
-        return apply_ilford_hp5(image)
-    if "teal" in name or "cine" in name:
-        return apply_cine_teal(image)
-    if "lomo" in name:
-        return apply_lomography(image)
-    if "kodachrome" in name:
-        return apply_kodachrome(image)
-    if "noir" in name or "dramatic" in name:
-        return apply_dramatic_noir(image)
-    
-    # Handle older names for compatibility
-    if "sepia" in name or "warm" in name:
-        return apply_kodak_portra(image)
-    if "cool" in name or "cinema" in name:
-        return apply_cine_teal(image)
-    
-    return image
+    # Fallback for "Contains" matching if exact key fails (Legacy support)
+    if not filter_func:
+        name = str(filter_name).lower()
+        if "portra" in name: filter_func = apply_kodak_portra
+        elif "velvia" in name: filter_func = apply_fuji_velvia
+        elif "polaroid" in name: filter_func = apply_polaroid_600
+        elif "hp5" in name or "b&w" in name: filter_func = apply_ilford_hp5
+        elif "teal" in name: filter_func = apply_cine_teal
+        elif "lomo" in name: filter_func = apply_lomography
+        elif "kodachrome" in name: filter_func = apply_kodachrome
+        elif "noir" in name: filter_func = apply_dramatic_noir
+        else: filter_func = lambda x: x
+
+    try:
+        return filter_func(image)
+    except Exception as e:
+        print(f"Filter Error: {e}")
+        return image
 
 # --- STICKER ASSETS ---
 def draw_pattern(draw, strip_width, strip_height, pattern_type, density):
