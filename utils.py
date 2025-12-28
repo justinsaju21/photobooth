@@ -95,72 +95,77 @@ def load_emoji_font(size=60):
 # --- FILTER FUNCTIONS ---
 # --- FILTER FUNCTIONS ---
 def apply_sepia(image):
-    # CSS: sepia(0.8) contrast(1.1)
-    # PIL Implementation:
+    # Authentic Faded Sepia
     gray = ImageOps.grayscale(image)
-    # Colorize roughly matches CSS Sepia
-    sepia = ImageOps.colorize(gray, "#5A4530", "#F4ECD8") 
+    # Colorize: Deep brown shadows, warm paper highlights
+    sepia = ImageOps.colorize(gray, "#2A1D0D", "#FDF6E3") 
     enhancer = ImageEnhance.Contrast(sepia)
-    return enhancer.enhance(1.1)
+    sepia = enhancer.enhance(0.9)
+    enhancer = ImageEnhance.Brightness(sepia)
+    return enhancer.enhance(1.05)
 
 def apply_bw(image):
-    # CSS: grayscale(1) contrast(1.2)
+    # High Contrast Silver Gelatin look
     gray = ImageOps.grayscale(image)
     enhancer = ImageEnhance.Contrast(gray)
-    return enhancer.enhance(1.2)
+    gray = enhancer.enhance(1.3)
+    enhancer = ImageEnhance.Brightness(gray)
+    return enhancer.enhance(1.1)
 
 def apply_warm_retro(image):
-    # CSS: sepia(0.4) saturate(1.4) contrast(1.1)
-    # PIL:
-    img = apply_sepia(image) # Base warm
-    img = Image.blend(image, img, 0.4) # Blend back original for less sepia
+    # Warm, slightly overexposed cross-processed look
+    gray = ImageOps.grayscale(image)
+    warm = ImageOps.colorize(gray, "#2D1C02", "#FFF9E5")
+    img = Image.blend(image, warm, 0.6)
     enhancer = ImageEnhance.Color(img)
     img = enhancer.enhance(1.4)
     enhancer = ImageEnhance.Contrast(img)
     return enhancer.enhance(1.1)
 
 def apply_grain(image):
-    # CSS: sepia(0.4) saturate(0.8) contrast(1.2)
-    img = apply_sepia(image)
-    img = Image.blend(image, img, 0.4)
+    # Faded 70s Newsprint look
+    gray = ImageOps.grayscale(image)
+    faded = ImageOps.colorize(gray, "#201A15", "#E8D8C8")
+    img = Image.blend(image, faded, 0.7)
     enhancer = ImageEnhance.Color(img)
-    img = enhancer.enhance(0.8)
+    img = enhancer.enhance(0.7)
     enhancer = ImageEnhance.Contrast(img)
     return enhancer.enhance(1.2)
 
 def apply_soft_glow(image):
-    # CSS: brightness(1.1) blur(1px) contrast(1.05)
-    img = image.filter(ImageFilter.GaussianBlur(1))
+    # Dreamy, blooming highlights
+    glow = image.filter(ImageFilter.GaussianBlur(3))
+    img = Image.blend(image, glow, 0.3)
+    enhancer = ImageEnhance.Brightness(img)
+    img = enhancer.enhance(1.15)
+    enhancer = ImageEnhance.Contrast(img)
+    return enhancer.enhance(0.9)
+
+def apply_cool_cinema(image):
+    # Cold Blue Cinema look
+    gray = ImageOps.grayscale(image)
+    cold = ImageOps.colorize(gray, "#000810", "#E0F0FF") 
+    img = Image.blend(image, cold, 0.5)
+    enhancer = ImageEnhance.Contrast(img)
+    return enhancer.enhance(1.2)
+
+def apply_vintage_rose(image):
+    # Aesthetics Pink/Rose tint
+    gray = ImageOps.grayscale(image)
+    rose = ImageOps.colorize(gray, "#2D0A14", "#FFE5E5")
+    img = Image.blend(image, rose, 0.4)
     enhancer = ImageEnhance.Brightness(img)
     img = enhancer.enhance(1.1)
     enhancer = ImageEnhance.Contrast(img)
-    return enhancer.enhance(1.05)
-
-def apply_cool_cinema(image):
-    # CSS: hue-rotate(180) sepia(0.2)
-    # PIL:
-    gray = ImageOps.grayscale(image)
-    # Blue-ish tint
-    colored = ImageOps.colorize(gray, "#001020", "#D0E0F0") 
-    img = Image.blend(image, colored, 0.4)
-    return img
-
-def apply_vintage_rose(image):
-    # CSS: sepia(0.3) saturate(0.9) hue-rotate(320)
-    # PIL: Pink tint
-    gray = ImageOps.grayscale(image)
-    pink = ImageOps.colorize(gray, "#400010", "#FFD0D0")
-    img = Image.blend(image, pink, 0.3)
-    enhancer = ImageEnhance.Color(img)
     return enhancer.enhance(0.9)
 
 def apply_dramatic(image):
-    # CSS: grayscale(1) contrast(1.5) brightness(0.9)
+    # Gritty, High Contrast Noir
     gray = ImageOps.grayscale(image)
     enhancer = ImageEnhance.Contrast(gray)
-    img = enhancer.enhance(1.5)
+    img = enhancer.enhance(1.8)
     enhancer = ImageEnhance.Brightness(img)
-    return enhancer.enhance(0.9) 
+    return enhancer.enhance(0.8) 
 
 def process_image(image, filter_name, flip=False):
     """Process image with cropping, resizing, flipping, and filters"""

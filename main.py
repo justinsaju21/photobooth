@@ -32,21 +32,21 @@ def get_live_filter_css(filter_name, mirror):
     filters = ""
     
     if filter_name == "Sepia":
-        filters = "sepia(0.8) contrast(1.1)"
+        filters = "sepia(1) contrast(0.9) brightness(1.05) saturate(1.2) hue-rotate(-10deg)"
     elif filter_name == "Black & White":
-        filters = "grayscale(1) contrast(1.2)"
+        filters = "grayscale(1) contrast(1.3) brightness(1.1)"
     elif filter_name == "Dramatic Noir":
-        filters = "grayscale(1) contrast(1.5) brightness(0.9)"
+        filters = "grayscale(1) contrast(1.8) brightness(0.8) blur(0.2px)"
     elif filter_name == "Warm Retro":
-        filters = "sepia(0.4) saturate(1.4) contrast(1.1)"
+        filters = "sepia(0.5) contrast(1.1) saturate(1.4) hue-rotate(-20deg) brightness(1.05)"
     elif filter_name == "Cool Cinema":
-        filters = "hue-rotate(180deg) sepia(0.2) contrast(1.1)"
+        filters = "contrast(1.2) brightness(1.1) saturate(1.1) hue-rotate(185deg) sepia(0.1)"
     elif filter_name == "Vintage Rose":
-         filters = "hue-rotate(320deg) sepia(0.3) saturate(0.9) contrast(1.1)"
+         filters = "hue-rotate(330deg) sepia(0.2) saturate(1.2) contrast(0.9) brightness(1.1)"
     elif filter_name == "1970s Grain":
-        filters = "sepia(0.4) saturate(0.8) contrast(1.2)" 
+        filters = "sepia(0.3) saturate(0.7) contrast(1.2) brightness(0.95) hue-rotate(-10deg)" 
     elif filter_name == "Soft Glow":
-        filters = "brightness(1.1) blur(1px) contrast(1.05)"
+        filters = "brightness(1.15) blur(1.5px) contrast(0.9) saturate(1.1)"
     else:
         filters = "none"
 
@@ -59,9 +59,9 @@ def get_live_filter_css(filter_name, mirror):
             max-width: 500px !important;
             aspect-ratio: 1 / 1 !important; /* Force square shape on container */
             margin: 0 auto !important;
-            border-radius: 12px !important;
+            border-radius: 0 0 12px 12px !important;
             overflow: hidden !important;
-            border: 4px solid #333 !important;
+            border: 1px solid var(--text-main) !important;
             position: relative !important;
             background-color: black !important;
         }}
@@ -89,15 +89,18 @@ def get_live_filter_css(filter_name, mirror):
         /* The Toggle Button Itself */
         [data-testid="collapsedControl"] {{
             visibility: visible !important;
-            display: block !important;
+            display: flex !important;
             z-index: 1001 !important;
             pointer-events: auto !important; /* Make button clickable */
-            color: #D4AF37 !important; /* Gold color */
-            background-color: white !important;
-            border-radius: 8px !important;
-            border: 1px solid #D4AF37 !important;
-            margin-top: 10px !important;
-            margin-left: 10px !important;
+            color: white !important;
+            background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-hover) 100%) !important;
+            border-radius: 50% !important;
+            border: 2px solid white !important;
+            width: 48px !important;
+            height: 48px !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
         }}
         
         /* Camera Button */
@@ -107,13 +110,14 @@ def get_live_filter_css(filter_name, mirror):
             left: 0 !important;
             width: 100% !important;
             z-index: 10 !important;
-            color: #ffffff !important;
-            background-color: #D4AF37 !important; 
+            color: white !important;
+            background-color: var(--text-main) !important; 
             border: none !important;
             font-weight: bold !important;
             text-transform: uppercase !important;
             border-radius: 0 !important; 
-            padding: 10px !important;
+            padding: 15px !important;
+            letter-spacing: 2px !important;
         }}
         
         /* Responsive */
