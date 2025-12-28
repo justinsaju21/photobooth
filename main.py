@@ -27,21 +27,27 @@ def get_live_filter_css(filter_name, mirror):
     filters = ""
     
     if filter_name == "Sepia":
-        filters = "sepia(0.8) contrast(1.1)"
+        filters = "sepia(1) saturate(0.8) contrast(1.1)"
     elif filter_name == "Black & White":
         filters = "grayscale(1) contrast(1.2)"
     elif filter_name == "Dramatic Noir":
-        filters = "grayscale(1) contrast(1.5) brightness(0.9)"
+        # PIL: Grayscale -> Contrast(1.6). CSS needs high contrast.
+        filters = "grayscale(1) contrast(1.6) brightness(1.1)"
     elif filter_name == "Warm Retro":
-        filters = "sepia(0.4) saturate(1.4) contrast(1.05)"
+        # PIL: Color(1.2) -> Blend with Orange. CSS: sepia/saturate fallback.
+        filters = "sepia(0.5) saturate(1.5) contrast(1.1) brightness(1.05)"
     elif filter_name == "Cool Cinema":
-        filters = "contrast(1.1) saturate(0.8) hue-rotate(190deg) sepia(0.3)"
+        # PIL: Color(0.6) -> Blend with Blue. CSS: hue-rotate/saturate.
+        filters = "contrast(1.1) saturate(0.6) hue-rotate(190deg) sepia(0.2)"
     elif filter_name == "Vintage Rose":
-        filters = "contrast(1.1) saturate(1.1) sepia(0.3) hue-rotate(315deg)"
+        # PIL: Blend with Pink -> Contrast(1.1).
+        filters = "contrast(1.1) saturate(1.1) sepia(0.3) hue-rotate(330deg)"
     elif filter_name == "1970s Grain":
-        filters = "sepia(0.4) saturate(1.4) contrast(1.1)" 
+        # PIL: Sepia -> Contrast(0.8).
+        filters = "sepia(0.6) saturate(1.2) contrast(0.9) brightness(1.1)" 
     elif filter_name == "Soft Glow":
-        filters = "brightness(1.1) blur(0.5px) contrast(1.1)"
+        # PIL: Bllur -> Blend. CSS: blur/brightness.
+        filters = "brightness(1.1) blur(1px) contrast(1.1)"
     else:
         filters = "none"
 
