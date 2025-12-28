@@ -161,50 +161,57 @@ def process_image(image, filter_name, flip=False):
     return image
 
 # --- STICKER ASSETS ---
-STICKER_PACKS = {
-    "None": [],
-    "Classic ❤️": ["❤️", "✨", "📷", "🕶️", "💋"],
-    "Vintage 🎞️": ["🎞️", "🎩", "🕰️", "📻", "🚲"],
-    "Party 🎉": ["🎉", "😎", "🍕", "🎈", "🦄"],
-    "Nature 🌸": ["🌸", "🌿", "🦋", "🍄", "☀️"],
-    "Love 💌": ["🧸", "💝", "💍", "🥰", "💏"],
-    "Spooky 👻": ["👻", "💀", "🕸️", "🎃", "🕯️"]
-}
-
-def draw_stickers(draw, strip_width, strip_height, sticker_list, density):
-    """Draw stickers on the strip borders"""
-    if not sticker_list:
+def draw_pattern(draw, strip_width, strip_height, pattern_type, density):
+    """Draw geometric patterns on the strip borders (No Emojis)"""
+    if pattern_type == "None":
         return
 
-    font = load_emoji_font(size=60)
-    num_stickers = int(density * 1.5) + 3 
+    num_shapes = int(density * 5) + 10
     
-    for _ in range(num_stickers):
-        symbol = random.choice(sticker_list)
-        x_pos = random.randint(0, strip_width - 60)
-        y_pos = random.randint(0, strip_height - 60)
+    # Define color palette based on vintage vibe
+    colors = ["#D4AF37", "#8B5E3C", "#A52A2A", "#2C3E50", "#E67E22", "#27AE60"]
+    
+    for _ in range(num_shapes):
+        x = random.randint(0, strip_width)
+        y = random.randint(0, strip_height)
         
-        # Bias towards edges
-        if random.random() > 0.3: 
-            if random.choice([True, False]):
-                x_pos = random.randint(0, 40) 
-            else:
-                x_pos = random.randint(strip_width - 80, strip_width - 20) 
-                
-        try:
-            # Try embedded color first (for colored emojis)
-            try:
-                draw.text((x_pos, y_pos), symbol, font=font, fill="#404040", embedded_color=True)
-            except TypeError:
-                # Fallback for standard PIL or non-supported fonts
-                draw.text((x_pos, y_pos), symbol, font=font, fill="#404040")
-        except Exception:
-            continue
+        # Bias towards edges (keep center clear for photos)
+        if random.random() > 0.2:
+             if random.choice([True, False]):
+                x = random.randint(0, 60)
+             else:
+                x = random.randint(strip_width - 60, strip_width)
+        else:
+             # Randomly re-roll if it lands in the middle photo area
+             if 100 < x < strip_width - 100:
+                 continue
 
+        color = random.choice(colors)
+        size = random.randint(5, 15)
+        
+        if pattern_type == "Polka Dots":
+            draw.ellipse([x, y, x+size, y+size], fill=color)
+            
+        elif pattern_type == "Confetti":
+            # Random rectangles and triangles
+            if random.choice([True, False]):
+                draw.rectangle([x, y, x+size, y+size], fill=color)
+            else:
+                draw.polygon([(x, y), (x+size, y+size), (x-size, y+size)], fill=color)
+                
+        elif pattern_type == "Stars":
+            # Simple Cross/Star shape
+            draw.line((x - size, y, x + size, y), fill=color, width=2)
+            draw.line((x, y - size, x, y + size), fill=color, width=2)
+            
+        elif pattern_type == "Minimal Lines":
+            # Horizontal dashes near edges
+            if x < 100 or x > strip_width - 100:
+                draw.line((x, y, x+20, y), fill="#333", width=3)
 
 def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_color="#333", 
-                 include_date=False, custom_border_color=None, sticker_pack="None", 
-                 custom_stickers="", sticker_density=5, font_style="Modern Sans"):
+                 include_date=False, custom_border_color=None, pattern_type="None", 
+                 sticker_density=5, font_style="Modern Sans"):
     """Create the final photo strip with all customizations"""
     photo_w, photo_h = 600, 600
     padding = 50
@@ -250,21 +257,9 @@ def create_strip(images, footer_text="Photobooth", frame_style="Cream", text_col
             strip.paste(img, (padding, y_offset))
         y_offset += photo_h + padding
 
-    # Collect stickers
-    active_stickers = []
-    if sticker_pack in STICKER_PACKS:
-        active_stickers.extend(STICKER_PACKS[sticker_pack])
-    
-    # Parse custom stickers (comma-separated or single)
-    if custom_stickers and custom_stickers.strip():
-        if "," in custom_stickers:
-            custom_list = [s.strip() for s in custom_stickers.split(",") if s.strip()]
-            active_stickers.extend(custom_list)
-        else:
-            active_stickers.append(custom_stickers.strip())
-            
-    if active_stickers:
-        draw_stickers(draw, strip_w, strip_h, active_stickers, sticker_density)
+    # Draw Patterns (Replaces Stickers)
+    if pattern_type != "None":
+        draw_pattern(draw, strip_w, strip_h, pattern_type, sticker_density)
 
     # Add text with selected font style
     font_title = load_font(60, "title", style=font_style)
