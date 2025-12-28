@@ -129,14 +129,22 @@ def apply_polaroid_600(image):
 
 def apply_ilford_hp5(image):
     # Classic Grainy B&W
-    img = ImageOps.grayscale(image)
-    enhancer = ImageEnhance.Contrast(img)
-    img = enhancer.enhance(1.5)
-    # Add grain/noise
-    img = img.convert("RGB")
-    noise = np.random.randint(0, 30, (img.size[1], img.size[0], 3), dtype='uint8')
-    noise_img = Image.fromarray(noise).convert("RGB")
-    return Image.blend(img, noise_img, 0.1)
+    try:
+        img = ImageOps.grayscale(image)
+        enhancer = ImageEnhance.Contrast(img)
+        img = enhancer.enhance(1.5)
+        img = img.convert("RGB")
+        
+        # Try to add grain, but abort if numpy fails
+        try:
+            noise = np.random.randint(0, 30, (img.size[1], img.size[0], 3), dtype='uint8')
+            noise_img = Image.fromarray(noise).convert("RGB")
+            return Image.blend(img, noise_img, 0.1)
+        except Exception:
+            return img
+            
+    except Exception:
+        return image.convert("RGB")
 
 def apply_cine_teal(image):
     # Teal/Orange Hollywood look

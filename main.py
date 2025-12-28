@@ -2,6 +2,8 @@ import streamlit as st
 import streamlit.components.v1 as components
 from PIL import Image
 import utils
+import importlib
+importlib.reload(utils)
 
 # --- PAGE SETUP ---
 # --- PAGE SETUP ---
