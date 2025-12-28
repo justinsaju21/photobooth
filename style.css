@@ -229,29 +229,62 @@ header[data-testid="stHeader"]>div:first-child {
     display: block !important;
 }
 
+/* --- SECURITY & PRIVACY --- */
+/* Hide Streamlit Toolbar (Manage App, valid for cloud apps to deter casual code checking) */
+[data-testid="stToolbar"] {
+    visibility: hidden !important;
+    display: none !important;
+    height: 0 !important;
+}
+
+/* Hide Footer */
+footer {
+    visibility: hidden !important;
+    display: none !important;
+    height: 0 !important;
+}
+
+/* Hide Streamlit branding hamburger if visible */
+#MainMenu {
+    visibility: hidden !important;
+    display: none !important;
+}
+
+/* NUCLEAR OPTION v2: High Contrast Sidebar Toggle */
 [data-testid="collapsedControl"] {
     visibility: visible !important;
     display: block !important;
     position: fixed !important;
-    /* Force it to stay */
-    top: 10px !important;
-    left: 10px !important;
-    z-index: 1000000 !important;
-    /* Only God is higher */
-    background-color: #D4AF37 !important;
-    /* Solid Gold */
-    color: black !important;
-    /* High contrast black icon */
-    border-radius: 8px !important;
-    padding: 0.5rem !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4) !important;
-    width: auto !important;
-    border: 2px solid white !important;
-    /* White border for pop */
+    top: 15px !important;
+    left: 15px !important;
+    z-index: 9999999 !important;
+    /* Maximum Priority */
+
+    background-color: #000000 !important;
+    /* Pure Black for maximum contrast */
+    color: #FFFFFF !important;
+    /* Pure White Icon */
+
+    border: 2px solid #D4AF37 !important;
+    /* Gold Border */
+    border-radius: 50% !important;
+    /* Circular for button look */
+    padding: 8px !important;
+    width: 45px !important;
+    height: 45px !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5) !important;
+    /* Gold Glow */
+    transition: all 0.3s ease !important;
 }
 
-/* Ensure the icon inside is high contrast */
+[data-testid="collapsedControl"]:hover {
+    transform: scale(1.1) !important;
+}
+
+/* Ensure the icon inside is white */
 [data-testid="collapsedControl"] svg {
-    fill: black !important;
-    stroke: black !important;
+    fill: white !important;
+    stroke: white !important;
+    width: 24px !important;
+    height: 24px !important;
 }
