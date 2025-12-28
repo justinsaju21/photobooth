@@ -92,15 +92,15 @@ def get_live_filter_css(filter_name, mirror):
             display: flex !important;
             z-index: 1001 !important;
             pointer-events: auto !important; /* Make button clickable */
-            color: white !important;
-            background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-hover) 100%) !important;
+            color: var(--bg-dark) !important;
+            background: var(--primary-gold) !important;
             border-radius: 50% !important;
             border: 2px solid white !important;
-            width: 48px !important;
-            height: 48px !important;
+            width: 50px !important;
+            height: 50px !important;
             align-items: center !important;
             justify-content: center !important;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5) !important;
         }}
         
         /* Camera Button */
@@ -110,14 +110,14 @@ def get_live_filter_css(filter_name, mirror):
             left: 0 !important;
             width: 100% !important;
             z-index: 10 !important;
-            color: white !important;
-            background-color: var(--text-main) !important; 
+            color: var(--bg-dark) !important;
+            background-color: var(--primary-gold) !important; 
             border: none !important;
             font-weight: bold !important;
             text-transform: uppercase !important;
             border-radius: 0 !important; 
-            padding: 15px !important;
-            letter-spacing: 2px !important;
+            padding: 18px !important;
+            letter-spacing: 3px !important;
         }}
         
         /* Responsive */
