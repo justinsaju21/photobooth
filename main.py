@@ -47,8 +47,7 @@ def get_live_filter_css(filter_name, mirror):
 
     return f"""
     <style>
-    return f"""
-    <style>
+
         /* Camera Container Sizing - Enforce Square Aspect Ratio on Container */
         div[data-testid="stCameraInput"] {{
             width: 100% !important;
